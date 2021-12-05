@@ -21,6 +21,13 @@ const calculatePositive = (good, neutral, bad) => {
 }
 
 const Statistics = ({ good, neutral, bad }) => {
+  if ( calculateAll(good, neutral, bad) === 0 ) return (
+    <>
+      <h2>statistics</h2>
+      <p>No feedback given</p>
+    </>
+  )
+
   return (
     <>
       <h2>statistics</h2>
@@ -30,7 +37,6 @@ const Statistics = ({ good, neutral, bad }) => {
       <Statistic value={(calculateAll(good, neutral, bad))} text="all" />
       <Statistic value={(calculateAverage(good, neutral, bad))} text="average" />
       <Statistic value={(calculatePositive(good, neutral, bad))} text="positive" />
-
     </>
   )
 }
