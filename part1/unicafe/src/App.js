@@ -6,6 +6,35 @@ const Button = ({ handleClick, text }) => {
   )
 }
 
+const calculateAll = (good, neutral, bad) => {
+  return good + neutral + bad
+}
+
+const calculateAverage = (good, neutral, bad) => {
+  if ( calculateAll(good, neutral, bad) === 0 ) return 0
+  return ( good - bad ) / calculateAll(good, neutral, bad)
+}
+
+const calculatePositive = (good, neutral, bad) => {
+  if ( calculateAll(good, neutral, bad) === 0 ) return 0 + ' %'
+  return ( good * 100 / calculateAll(good, neutral, bad) ) + ' %'
+}
+
+const Statistics = ({ good, neutral, bad }) => {
+  return (
+    <>
+      <h2>statistics</h2>
+      <Statistic value={good} text="good" />
+      <Statistic value={neutral} text="neutral" />
+      <Statistic value={bad} text="bad" />
+      <Statistic value={(calculateAll(good, neutral, bad))} text="all" />
+      <Statistic value={(calculateAverage(good, neutral, bad))} text="average" />
+      <Statistic value={(calculatePositive(good, neutral, bad))} text="positive" />
+
+    </>
+  )
+}
+
 const Statistic = ({ value, text }) => {
   return (
     <p>{text} {value}</p>
@@ -30,33 +59,13 @@ const App = () => {
     setBad(bad + 1)
   }
 
-  const calculateAll = () => {
-    return good + neutral + bad
-  }
-
-  const calculateAverage = () => {
-    if ( calculateAll() === 0 ) return 0
-    return ( good - bad ) / calculateAll()
-  }
-
-  const calculatePositive = () => {
-    if ( calculateAll() === 0 ) return 0 + ' %'
-    return ( good * 100 / calculateAll() ) + ' %'
-  }
-
   return (
     <div>
       <h1>Give feedback</h1>
       <Button handleClick={handleGoodClick} text="good" />
       <Button handleClick={handleNeutralClick} text="neutral" />
       <Button handleClick={handleBadClick} text="bad" />
-      <h2>statistics</h2>
-      <Statistic value={good} text="good" />
-      <Statistic value={neutral} text="neutral" />
-      <Statistic value={bad} text="bad" />
-      <Statistic value={(calculateAll())} text="all" />
-      <Statistic value={(calculateAverage())} text="average" />
-      <Statistic value={(calculatePositive())} text="positive" />
+      <Statistics good={good} neutral={neutral} bad={bad} />
     </div>
   )
 }
