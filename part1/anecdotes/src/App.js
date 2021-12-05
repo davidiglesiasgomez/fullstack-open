@@ -13,9 +13,16 @@ const App = () => {
    
   const [selected, setSelected] = useState(0)
 
+  const handleClick = () => {
+    const aleatorio = parseInt(Math.random() * (anecdotes.length - 0) + 0)
+    setSelected(aleatorio)
+  }
+
   return (
     <div>
       {anecdotes[selected]}
+      <br />
+      <button onClick={handleClick}>next anecdote</button>
     </div>
   )
 }
