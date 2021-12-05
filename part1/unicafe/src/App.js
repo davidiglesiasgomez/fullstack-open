@@ -31,19 +31,23 @@ const Statistics = ({ good, neutral, bad }) => {
   return (
     <>
       <h2>statistics</h2>
-      <StatisticLine value={good} text="good" />
-      <StatisticLine value={neutral} text="neutral" />
-      <StatisticLine value={bad} text="bad" />
-      <StatisticLine value={(calculateAll(good, neutral, bad))} text="all" />
-      <StatisticLine value={(calculateAverage(good, neutral, bad))} text="average" />
-      <StatisticLine value={(calculatePositive(good, neutral, bad))} text="positive" />
+      <table>
+        <StatisticLine value={good} text="good" />
+        <StatisticLine value={neutral} text="neutral" />
+        <StatisticLine value={bad} text="bad" />
+        <StatisticLine value={(calculateAll(good, neutral, bad))} text="all" />
+        <StatisticLine value={(calculateAverage(good, neutral, bad))} text="average" />
+        <StatisticLine value={(calculatePositive(good, neutral, bad))} text="positive" />
+      </table>
     </>
   )
 }
 
 const StatisticLine  = ({ value, text }) => {
   return (
-    <p>{text} {value}</p>
+    <tr>
+      <td>{text}</td><td>{value}</td>
+    </tr>
   )
 }
 
