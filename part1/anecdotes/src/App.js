@@ -13,7 +13,9 @@ const App = () => {
    
   const [selected, setSelected] = useState(0)
 
-  const [voted, setVoted] = useState({0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0})
+  const [voted, setVoted] = useState([0, 0, 0, 0, 0, 0, 0])
+
+  const [topone, setTopOne] = useState(null)
 
   const handleClick = () => {
     const aleatorio = parseInt(Math.random() * (anecdotes.length - 0) + 0)
@@ -24,14 +26,25 @@ const App = () => {
     const copy = { ...voted }
     copy[selected] += 1
     setVoted(copy)
+
+    const newtopone = Object.values(copy).indexOf(Math.max(...Object.values(copy)))
+    setTopOne(newtopone)
   }
 
   return (
     <div>
+      <h1>Anecdote of the day</h1>
       <p>{anecdotes[selected]}</p>
       <p>Has {voted[selected]} votes</p>
       <button onClick={handleVote}>vote</button>
       <button onClick={handleClick}>next anecdote</button>
+      <h2>Anecdote with most votes</h2>
+      { topone === null ? <></> :
+        <>
+          <p>{anecdotes[topone]}</p>
+          <p>Has {voted[topone]} votes</p>
+        </>
+      }     
     </div>
   )
 }
