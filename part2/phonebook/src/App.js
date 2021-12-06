@@ -4,6 +4,7 @@ const App = (props) => {
   const [persons, setPersons] = useState(props.persons) 
   const [newName, setNewName] = useState('')
   const [newPhone, setNewPhone] = useState('')
+  const [newFilter, setNewFilter] = useState('')
 
   const handleChangeName = (event) => {
     setNewName(event.target.value)
@@ -28,7 +29,8 @@ const App = (props) => {
 
     const newPhoneObject = {
       name: newName,
-      phone: newPhone
+      phone: newPhone,
+      id: ( Math.max(...persons.map((person) => person.id), 0) + 1 )
     }
 
     setPersons(persons.concat(newPhoneObject))
@@ -36,9 +38,18 @@ const App = (props) => {
     setNewPhone('')
   }
 
+  const handleChangeFilter = (event) => {
+    setNewFilter(event.target.value)
+  }
+
   return (
     <div>
       <h1>Phonebook</h1>
+      <h2>Filter</h2>
+      <div>
+          filter shown with <input value={newFilter} onChange={handleChangeFilter} />
+        </div>
+      <h2>Add a new</h2>
       <form onSubmit={handleSubmit}>
         <div>
           name: <input value={newName} onChange={handleChangeName} />
@@ -51,7 +62,12 @@ const App = (props) => {
         </div>
       </form>
       <h2>Numbers</h2>
-      {persons.map((person) => <p key={person.name}>{person.name} {person.phone}</p>)}
+      { 
+        newFilter === ''
+        ? persons.map((person) => <p key={person.id}>{person.name} {person.phone}</p>)
+        : persons.filter((person) => person.name.match(new RegExp( newFilter, 'i' ))).map((person) => <p key={person.id}>{person.name} {person.phone}</p>)
+      }
+      
     </div>
   )
 }
