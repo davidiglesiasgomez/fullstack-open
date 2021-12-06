@@ -13,6 +13,16 @@ const App = () => {
   const handleSubmit = (event) => {
     event.preventDefault()
 
+    if (newName === '') {
+      alert(`It's necessary indicate a name`)
+      return
+    }
+
+    if (persons.find((person) => person.name === newName)) {
+      alert(`${newName} is already added to phonebook`)
+      return
+    }
+
     const newPhoneObject = {
       name: newName
     }
