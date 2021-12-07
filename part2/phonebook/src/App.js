@@ -57,6 +57,15 @@ const App = () => {
     setNewFilter(event.target.value)
   }
 
+  const handleDelete = (id) => {
+    console.log(id)
+    personService
+      .remove(id)
+      .then(response => {   
+        setPersons(persons.filter(person => person.id !== id))
+      })
+  }
+
   return (
     <div>
       <h1>Phonebook</h1>
@@ -74,6 +83,7 @@ const App = () => {
       <Persons 
         newFilter={newFilter} 
         persons={persons} 
+        handleDelete={handleDelete} 
       />
     </div>
   )

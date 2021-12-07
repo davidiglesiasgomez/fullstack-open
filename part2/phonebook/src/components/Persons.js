@@ -1,4 +1,4 @@
-const Persons = ({ newFilter, persons }) => {
+const Persons = ({ newFilter, persons, handleDelete }) => {
 
   const personsToShow = ( 
     newFilter === '' 
@@ -9,7 +9,7 @@ const Persons = ({ newFilter, persons }) => {
   return (
     <>
       {personsToShow.map(person => 
-        <p key={person.id}>{person.name} {person.phone}</p>
+        <p key={person.id}>{person.name} {person.phone} <button onClick={() => { if (window.confirm(`Delete ${person.name}?`)) handleDelete(person.id) }}>delete</button></p>
       )}
     </>
   )
