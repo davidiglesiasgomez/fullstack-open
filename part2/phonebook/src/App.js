@@ -11,15 +11,12 @@ const App = () => {
   const [newFilter, setNewFilter] = useState('')
 
   useEffect(() => {
-    console.log('effect')    
     axios      
     .get('http://localhost:3001/persons')      
     .then(response => {        
-      console.log('promise fulfilled')        
       setPersons(response.data)      
     })  
   }, [])
-  console.log('render', persons.length, 'persons')
 
   const handleChangeName = (event) => {
     setNewName(event.target.value)
@@ -44,13 +41,17 @@ const App = () => {
 
     const newPhoneObject = {
       name: newName,
-      phone: newPhone,
-      id: ( Math.max(...persons.map((person) => person.id), 0) + 1 )
+      phone: newPhone
     }
 
-    setPersons(persons.concat(newPhoneObject))
-    setNewName('')
-    setNewPhone('')
+    axios    
+      .post('http://localhost:3001/persons', newPhoneObject)    
+      .then(response => {      
+        console.log(response.data)    
+        setPersons(persons.concat(response.data))
+        setNewName('')
+        setNewPhone('')
+      })
   }
 
   const handleChangeFilter = (event) => {
@@ -64,7 +65,7 @@ const App = () => {
       <Filter newFilter={newFilter} handleChangeFilter={handleChangeFilter} />
       <h2>Add a new</h2>
       <PersonForm 
-        newFilter={newFilter} 
+        newName={newName} 
         newPhone={newPhone} 
         handleSubmit={handleSubmit} 
         handleChangeName={handleChangeName} 
