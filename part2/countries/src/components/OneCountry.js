@@ -1,3 +1,5 @@
+import Weather from './Weather'
+
 const OneCountry = ({ country }) => {
 
     const languages = Object.keys(country.languages).map(function(key) {return country.languages[key]})
@@ -9,9 +11,10 @@ const OneCountry = ({ country }) => {
         <p>population {country.population}</p>
         <h2>languages</h2>
         <ul>
-            {languages.map(language => <li>{language}</li>)}
+            {languages.map(language => <li key={language}>{language}</li>)}
         </ul>
         <img src={country.flags.png} alt={country.name.common} />
+        <Weather city={country.capital[0]} />
       </>
     )
 }
