@@ -55,6 +55,10 @@ const App = () => {
           setNewPhone('')
           handleMessage(`Modified ${newName}`, 'success')          
         })
+        .catch(error => {
+          setPersons(persons.filter(person => person.id !== person_found.id))
+          handleMessage(`Information of ${newName} has already removed from server`, 'error')
+        })
       return
     }
 
@@ -78,6 +82,10 @@ const App = () => {
       .then(response => {   
         setPersons(persons.filter(person => person.id !== id))
         handleMessage(`Deleted`, 'success')         
+      })
+      .catch(error => {
+        setPersons(persons.filter(person => person.id !== id))
+        handleMessage(`Information has already removed from server`, 'error')
       })
   }
 
