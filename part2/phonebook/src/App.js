@@ -3,12 +3,14 @@ import Filter from './components/Filter'
 import Persons from './components/Persons'
 import PersonForm from './components/PersonForm'
 import personService from './services/persons'
+import Notification from './components/Notification'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newPhone, setNewPhone] = useState('')
   const [newFilter, setNewFilter] = useState('')
+  const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
     personService
@@ -51,6 +53,7 @@ const App = () => {
           setPersons(persons.map(person => person.id !== person_found.id ? person : response.data))
           setNewName('')
           setNewPhone('')
+          handleMessage(`Modified ${newName}`, 'success')          
         })
       return
     }
@@ -61,6 +64,7 @@ const App = () => {
         setPersons(persons.concat(response.data))
         setNewName('')
         setNewPhone('')
+        handleMessage(`Added ${newName}`, 'success')
       })
   }
 
@@ -69,17 +73,25 @@ const App = () => {
   }
 
   const handleDelete = (id) => {
-    console.log(id)
     personService
       .remove(id)
       .then(response => {   
         setPersons(persons.filter(person => person.id !== id))
+        handleMessage(`Deleted`, 'success')         
       })
+  }
+
+  const handleMessage = (message, type) => {
+    setErrorMessage({message: message, type: type})
+    setTimeout(() => {          
+      setErrorMessage({})        
+    }, 5000)
   }
 
   return (
     <div>
       <h1>Phonebook</h1>
+      <Notification message={errorMessage} />      
       <h2>Filter</h2>
       <Filter newFilter={newFilter} handleChangeFilter={handleChangeFilter} />
       <h2>Add a new</h2>
