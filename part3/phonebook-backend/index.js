@@ -24,6 +24,8 @@ let persons = [
     }
 ]
 
+app.use(express.json())
+
 app.get('/', (request, response) => {
   response.send('<h1>Hello World!</h1>')
 })
@@ -52,6 +54,14 @@ app.delete('/api/persons/:id', (request, response) => {
   persons = persons.filter(person => person.id !== id)
 
   response.status(204).end()
+})
+
+app.post('/api/persons', (request, response) => {
+  const person = request.body  
+  person.id = ( Math.max(...persons.map((person) => person.id), 0) + 1 )
+  persons.push(person)
+
+  response.json(person)
 })
 
 const PORT = 3001
