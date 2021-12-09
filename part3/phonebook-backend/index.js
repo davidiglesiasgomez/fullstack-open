@@ -57,6 +57,17 @@ app.delete('/api/persons/:id', (request, response) => {
 })
 
 app.post('/api/persons', (request, response) => {
+
+  if (typeof request.body.name === 'undefined' || request.body.name.trim() === '' || typeof request.body.number === 'undefined' || request.body.number.trim() === '') {
+    response.json({ error: 'name or number are missing' }).status(400).end()
+    return
+  }
+
+  if (persons.find(person => person.name === request.body.name) !== null) {
+    response.json({ error: 'name must be unique' }).status(400).end()
+    return
+  }
+
   const person = request.body  
   person.id = ( Math.max(...persons.map((person) => person.id), 0) + 1 )
   persons.push(person)
