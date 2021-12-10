@@ -1,29 +1,32 @@
 const express = require('express')
 const morgan = require('morgan')
+const cors = require('cors')
 const app = express()
 
 let persons = [
-    { 
+    {
       "id": 1,
-      "name": "Arto Hellas", 
+      "name": "Arto Hellas",
       "number": "040-123456"
     },
-    { 
+    {
       "id": 2,
-      "name": "Ada Lovelace", 
+      "name": "Ada Lovelace",
       "number": "39-44-5323523"
     },
-    { 
+    {
       "id": 3,
-      "name": "Dan Abramov", 
+      "name": "Dan Abramov",
       "number": "12-43-234345"
     },
-    { 
+    {
       "id": 4,
-      "name": "Mary Poppendieck", 
+      "name": "Mary Poppendieck",
       "number": "39-23-6423122"
     }
 ]
+
+app.use(cors())
 
 app.use(express.json())
 
@@ -80,16 +83,17 @@ app.delete('/api/persons/:id', (request, response) => {
 app.post('/api/persons', (request, response) => {
 
   if (typeof request.body.name === 'undefined' || request.body.name.trim() === '' || typeof request.body.number === 'undefined' || request.body.number.trim() === '') {
-    response.json({ error: 'name or number are missing' }).status(400).end()
+    response.status(400).json({ error: 'name or number are missing' }).end()
     return
   }
 
-  if (persons.find(person => person.name === request.body.name) !== null) {
-    response.json({ error: 'name must be unique' }).status(400).end()
+  const check = persons.find(person => person.name === request.body.name) || null
+  if (check !== null) {
+    response.status(400).json({ error: 'name must be unique' }).end()
     return
   }
 
-  const person = request.body  
+  const person = request.body
   person.id = ( Math.max(...persons.map((person) => person.id), 0) + 1 )
   persons.push(person)
 
