@@ -6,7 +6,7 @@ import personService from './services/persons'
 import Notification from './components/Notification'
 
 const App = () => {
-  const [persons, setPersons] = useState([]) 
+  const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newPhone, setNewPhone] = useState('')
   const [newFilter, setNewFilter] = useState('')
@@ -15,9 +15,12 @@ const App = () => {
   useEffect(() => {
     personService
       .getAll()
-      .then(response => {        
-        setPersons(response.data)      
-      })  
+      .then(response => {
+        setPersons(response.data)
+      })
+      .catch(error => {
+        handleMessage(`Server unavailable`, 'error')
+      })
   }, [])
 
   const handleChangeName = (event) => {
@@ -38,7 +41,7 @@ const App = () => {
 
     const newPhoneObject = {
       name: newName,
-      phone: newPhone
+      number: newPhone
     }
 
     let person_found = persons.find((person) => person.name === newName) || null
@@ -49,13 +52,17 @@ const App = () => {
 
       personService
         .update(newPhoneObject, person_found.id)
-        .then(response => {      
+        .then(response => {
           setPersons(persons.map(person => person.id !== person_found.id ? person : response.data))
           setNewName('')
           setNewPhone('')
-          handleMessage(`Modified ${newName}`, 'success')          
+          handleMessage(`Modified ${newName}`, 'success')
         })
         .catch(error => {
+          if (error.response.status === 404) {
+            handleMessage(`Error: ${error.response.data.error}`, 'error')
+            return
+          }
           setPersons(persons.filter(person => person.id !== person_found.id))
           handleMessage(`Information of ${newName} has already removed from server`, 'error')
         })
@@ -64,11 +71,19 @@ const App = () => {
 
     personService
       .create(newPhoneObject)
-      .then(response => {      
+      .then(response => {
         setPersons(persons.concat(response.data))
+        console.log({persons})
         setNewName('')
         setNewPhone('')
         handleMessage(`Added ${newName}`, 'success')
+      })
+      .catch(error => {
+        if (error.response.status === 400) {
+            handleMessage(`Error: ${error.response.data.error}`, 'error')
+            return
+        }
+        handleMessage(`Server unavailable`, 'error')
       })
   }
 
@@ -79,9 +94,9 @@ const App = () => {
   const handleDelete = (id) => {
     personService
       .remove(id)
-      .then(response => {   
+      .then(response => {
         setPersons(persons.filter(person => person.id !== id))
-        handleMessage(`Deleted`, 'success')         
+        handleMessage(`Deleted`, 'success')
       })
       .catch(error => {
         setPersons(persons.filter(person => person.id !== id))
@@ -91,30 +106,30 @@ const App = () => {
 
   const handleMessage = (message, type) => {
     setErrorMessage({message: message, type: type})
-    setTimeout(() => {          
-      setErrorMessage({})        
+    setTimeout(() => {
+      setErrorMessage({})
     }, 5000)
   }
 
   return (
     <div>
       <h1>Phonebook</h1>
-      <Notification message={errorMessage} />      
+      <Notification message={errorMessage} />
       <h2>Filter</h2>
       <Filter newFilter={newFilter} handleChangeFilter={handleChangeFilter} />
       <h2>Add a new</h2>
-      <PersonForm 
-        newName={newName} 
-        newPhone={newPhone} 
-        handleSubmit={handleSubmit} 
-        handleChangeName={handleChangeName} 
-        handleChangePhone={handleChangePhone} 
+      <PersonForm
+        newName={newName}
+        newPhone={newPhone}
+        handleSubmit={handleSubmit}
+        handleChangeName={handleChangeName}
+        handleChangePhone={handleChangePhone}
       />
       <h2>Numbers</h2>
-      <Persons 
-        newFilter={newFilter} 
-        persons={persons} 
-        handleDelete={handleDelete} 
+      <Persons
+        newFilter={newFilter}
+        persons={persons}
+        handleDelete={handleDelete}
       />
     </div>
   )
