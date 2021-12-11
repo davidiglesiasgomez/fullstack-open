@@ -2,9 +2,6 @@ const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
 const app = express()
-const mongoose = require('mongoose')
-const dotenv = require('dotenv')
-dotenv.config()
 const Person = require('./models/person')
 
 app.use(express.static('build'))
@@ -66,23 +63,15 @@ app.delete('/api/persons/:id', (request, response) => {
 })
 
 app.post('/api/persons', (request, response) => {
+  const person = new Person({
+    name: request.body.name,
+    number: request.body.number,
+  })
+  
+  person.save().then(result => {
+    response.json(person)
+  })
 
-  if (typeof request.body.name === 'undefined' || request.body.name.trim() === '' || typeof request.body.number === 'undefined' || request.body.number.trim() === '') {
-    response.status(400).json({ error: 'name or number are missing' }).end()
-    return
-  }
-
-  const check = persons.find(person => person.name === request.body.name) || null
-  if (check !== null) {
-    response.status(400).json({ error: 'name must be unique' }).end()
-    return
-  }
-
-  const person = request.body
-  person.id = ( Math.max(...persons.map((person) => person.id), 0) + 1 )
-  persons.push(person)
-
-  response.json(person)
 })
 
 const unknownEndpoint = (request, response) => {
