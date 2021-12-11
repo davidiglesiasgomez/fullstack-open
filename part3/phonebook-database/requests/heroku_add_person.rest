@@ -1,0 +1,7 @@
+POST https://phonebook-backend-1408.herokuapp.com/api/persons
+content-type: application/json
+
+{
+    "name": "Prueba",
+    "number": "111-222-333"
+}
