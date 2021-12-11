@@ -35,8 +35,11 @@ app.get('/', (request, response) => {
 })
 
 app.get('/info', (request, response) => {
-  response.send(`Phonebook has info for ${persons.length} people<br /><br />${Date()}`)
-})
+  Person.count().then(total => {
+    response.send(`Phonebook has info for ${total} people<br /><br />${Date()}`)
+  })
+  .catch(error => next(error))
+}) 
 
 app.get('/api/persons', (request, response) => {
   Person.find({}).then(persons => {
