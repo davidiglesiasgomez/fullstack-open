@@ -65,7 +65,7 @@ app.delete('/api/persons/:id', (request, response) => {
   })
 })
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
   const person = new Person({
     name: request.body.name,
     number: request.body.number,
@@ -74,7 +74,7 @@ app.post('/api/persons', (request, response) => {
   person.save().then(result => {
     response.json(person)
   })
-
+  .catch(error => next(error))
 })
 
 app.put('/api/persons/:id', (request, response, next) => {
@@ -99,11 +99,13 @@ const unknownEndpoint = (request, response) => {
 app.use(unknownEndpoint)
 
 const errorHandler = (error, request, response, next) => {
-  console.error(error.message)
+  console.error(`${error.name} - ${error.message}`)
 
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
-  } 
+  } else if (error.name === 'MongoServerError' && error.message.indexOf('name_1 dup key') !== -1) {
+    return response.status(400).send({ error: 'repeated name' })
+  }
 
   next(error)
 }
