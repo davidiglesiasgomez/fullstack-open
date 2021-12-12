@@ -59,7 +59,7 @@ const App = () => {
           handleMessage(`Modified ${newName}`, 'success')
         })
         .catch(error => {
-          if (error.response.status === 404) {
+          if (error.response.status === 404 || error.response.status === 400) {
             handleMessage(`Error: ${error.response.data.error}`, 'error')
             return
           }
