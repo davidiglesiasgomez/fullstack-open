@@ -2,7 +2,7 @@ const dotenv = require('dotenv')
 dotenv.config()
 const mongoose = require('mongoose')
 
-const url = process.env.REACT_APP_MONGODB_CONNECTION_STRING
+const url = process.env.MONGODB_URI
 
 mongoose.connect(url)
 
@@ -32,7 +32,7 @@ if (process.argv.length === 2) {
     name: name,
     number: number,
   })
-  
+
   person.save().then(result => {
     console.log('person saved!')
     mongoose.connection.close()
