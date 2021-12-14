@@ -22,8 +22,30 @@ const favoriteBlog = (blogs) => {
   }
 }
 
+const mostBlogs = (blogs) => {
+  if (blogs.length === 0) return {}
+  let authors = {}
+  let returnAuthor = ''
+  let returnBlogs = 0
+  for (let i=0; i<blogs.length; i++) {
+    if (typeof authors[blogs[i].author] === 'undefined') {
+      authors[blogs[i].author] = 0
+    }
+    authors[blogs[i].author]++
+    if (authors[blogs[i].author] > returnBlogs) {
+      returnAuthor = blogs[i].author
+      returnBlogs = authors[blogs[i].author]
+    }
+  }
+  return {
+    'author': returnAuthor,
+    'blogs': returnBlogs
+  }
+}
+
 module.exports = {
   dummy,
   totalLikes,
-  favoriteBlog
+  favoriteBlog,
+  mostBlogs,
 }
