@@ -1,4 +1,3 @@
-/* eslint-disable import/no-anonymous-default-export */
 import axios from 'axios'
 const baseUrl = process.env.REACT_APP_SERVICES_PERSONS_BASE_URL
 
@@ -14,7 +13,7 @@ const remove = id => {
   return axios.delete(`${baseUrl}/${id}`)
 }
 
-const update = ( newObject, id ) => {
+const update = (newObject, id) => {
   return axios.put(`${baseUrl}/${id}`, newObject)
 }
 

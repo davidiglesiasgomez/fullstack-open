@@ -1,3 +1,5 @@
+import React from 'react'
+
 const Filter = ({ newFilter, handleChangeFilter }) => {
   return (
     <div>

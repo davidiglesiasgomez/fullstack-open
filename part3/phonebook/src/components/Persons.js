@@ -1,9 +1,10 @@
-const Persons = ({ newFilter, persons, handleDelete }) => {
+import React from 'react'
 
+const Persons = ({ newFilter, persons, handleDelete }) => {
   const personsToShow = (
     newFilter === ''
-    ? persons
-    : persons.filter((person) => person.name.match(new RegExp( newFilter, 'i' )))
+      ? persons
+      : persons.filter((person) => person.name.match(new RegExp(newFilter, 'i')))
   )
 
   return (

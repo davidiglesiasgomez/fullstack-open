@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { React, useState, useEffect } from 'react'
 import Filter from './components/Filter'
 import Persons from './components/Persons'
 import PersonForm from './components/PersonForm'
@@ -19,7 +19,8 @@ const App = () => {
         setPersons(response.data)
       })
       .catch(error => {
-        handleMessage(`Server unavailable`, 'error')
+        console.log(error)
+        handleMessage('Server unavailable', 'error')
       })
   }, [])
 
@@ -35,7 +36,7 @@ const App = () => {
     event.preventDefault()
 
     if (newName === '') {
-      alert(`It's necessary indicate a name`)
+      alert('It\'s necessary indicate a name')
       return
     }
 
@@ -44,16 +45,16 @@ const App = () => {
       number: newPhone
     }
 
-    let person_found = persons.find((person) => person.name === newName) || null
-    if (person_found !== null) {
-      if ( !window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`) ) {
+    const personFound = persons.find((person) => person.name === newName) || null
+    if (personFound !== null) {
+      if (!window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
         return
       }
 
       personService
-        .update(newPhoneObject, person_found.id)
+        .update(newPhoneObject, personFound.id)
         .then(response => {
-          setPersons(persons.map(person => person.id !== person_found.id ? person : response.data))
+          setPersons(persons.map(person => person.id !== personFound.id ? person : response.data))
           setNewName('')
           setNewPhone('')
           handleMessage(`Modified ${newName}`, 'success')
@@ -63,7 +64,7 @@ const App = () => {
             handleMessage(`Error: ${error.response.data.error}`, 'error')
             return
           }
-          setPersons(persons.filter(person => person.id !== person_found.id))
+          setPersons(persons.filter(person => person.id !== personFound.id))
           handleMessage(`Information of ${newName} has already removed from server`, 'error')
         })
       return
@@ -73,17 +74,17 @@ const App = () => {
       .create(newPhoneObject)
       .then(response => {
         setPersons(persons.concat(response.data))
-        console.log({persons})
+        console.log({ persons })
         setNewName('')
         setNewPhone('')
         handleMessage(`Added ${newName}`, 'success')
       })
       .catch(error => {
         if (error.response.status === 400) {
-            handleMessage(`Error: ${error.response.data.error}`, 'error')
-            return
+          handleMessage(`Error: ${error.response.data.error}`, 'error')
+          return
         }
-        handleMessage(`Server unavailable`, 'error')
+        handleMessage('Server unavailable', 'error')
       })
   }
 
@@ -95,17 +96,19 @@ const App = () => {
     personService
       .remove(id)
       .then(response => {
+        console.log(response)
         setPersons(persons.filter(person => person.id !== id))
-        handleMessage(`Deleted`, 'success')
+        handleMessage('Deleted', 'success')
       })
       .catch(error => {
+        console.log(error)
         setPersons(persons.filter(person => person.id !== id))
-        handleMessage(`Information has already removed from server`, 'error')
+        handleMessage('Information has already removed from server', 'error')
       })
   }
 
   const handleMessage = (message, type) => {
-    setErrorMessage({message: message, type: type})
+    setErrorMessage({ message: message, type: type })
     setTimeout(() => {
       setErrorMessage({})
     }, 5000)
