@@ -1,6 +1,6 @@
 const listHelper = require('../utils/list_helper')
 
-describe('most blogs', () => {
+describe('most likes', () => {
   const listWithOneBlog = [
     {
       _id: '5a422aa71b54a676234d17f8',
@@ -64,23 +64,23 @@ describe('most blogs', () => {
   ]
 
   test('of empty list is empty', () => {
-    const result = listHelper.mostBlogs([])
+    const result = listHelper.mostLikes([])
     expect(result).toStrictEqual({})
   })
 
   test('when list has only one blog, equals the author of that', () => {
-    const result = listHelper.mostBlogs(listWithOneBlog)
+    const result = listHelper.mostLikes(listWithOneBlog)
     expect(result).toStrictEqual({
       author: 'Edsger W. Dijkstra',
-      blogs: 1
+      likes: 5
     })
   })
 
   test('of a bigger list is calculated right', () => {
-    const result = listHelper.mostBlogs(listWithMoreBlogs)
+    const result = listHelper.mostLikes(listWithMoreBlogs)
     expect(result).toStrictEqual({
-      author: 'Robert C. Martin',
-      blogs: 3
+      author: 'Edsger W. Dijkstra',
+      likes: 17
     })
   })
 })
