@@ -34,12 +34,12 @@ app.get('/', (request, response) => {
   response.send('<h1>Hello World!</h1>')
 })
 
-app.get('/info', (request, response) => {
+app.get('/info', (request, response, next) => {
   Person.count().then(total => {
     response.send(`Phonebook has info for ${total} people<br /><br />${Date()}`)
   })
-  .catch(error => next(error))
-}) 
+    .catch(error => next(error))
+})
 
 app.get('/api/persons', (request, response) => {
   Person.find({}).then(persons => {
@@ -49,20 +49,21 @@ app.get('/api/persons', (request, response) => {
 
 app.get('/api/persons/:id', (request, response, next) => {
   Person.findById(request.params.id).then(person => {
-    if (person) {        
-      response.json(person)      
-    } else {        
-      response.status(404).end()      
-    }    
+    if (person) {
+      response.json(person)
+    } else {
+      response.status(404).end()
+    }
   })
-  .catch(error => next(error))
+    .catch(error => next(error))
 })
 
 app.delete('/api/persons/:id', (request, response) => {
   Person.findByIdAndRemove(request.params.id)
-  .then(result => {
-    response.status(204).end()
-  })
+    .then(result => {
+      console.log(result)
+      response.status(204).end()
+    })
 })
 
 app.post('/api/persons', (request, response, next) => {
@@ -70,11 +71,12 @@ app.post('/api/persons', (request, response, next) => {
     name: request.body.name,
     number: request.body.number,
   })
-  
+
   person.save().then(result => {
+    console.log(result)
     response.json(person)
   })
-  .catch(error => next(error))
+    .catch(error => next(error))
 })
 
 app.put('/api/persons/:id', (request, response, next) => {
