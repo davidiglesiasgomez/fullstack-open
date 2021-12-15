@@ -8,7 +8,7 @@ module.exports = {
   },
   'extends': 'eslint:recommended',
   'parserOptions': {
-    'ecmaVersion': 13
+    'ecmaVersion': 12
   },
   'rules': {
     'indent': [
@@ -30,6 +30,6 @@ module.exports = {
     'no-trailing-spaces': [
       2,
       { 'skipBlankLines': false }
-    ],
+    ]
   }
 }
