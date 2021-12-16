@@ -145,3 +145,18 @@ test('new blog without likes at the request defaults to zero', async () => {
 afterAll(async () => {
   await mongoose.connection.close()
 })
+
+test('new blog without title and url at the request returns status code 400 Bad Request', async () => {
+  const newBlog = {
+    'author': 'Unknown',
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+})
+
+afterAll(async () => {
+  await mongoose.connection.close()
+})
