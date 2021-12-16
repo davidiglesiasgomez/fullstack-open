@@ -39,6 +39,40 @@ describe('when there is initially some blogs saved', () => {
   })
 
   describe('viewing a specific blog', () => {
+
+    test('succeeds with a valid id', async () => {
+      const blogsAtStart = await helper.blogsInDb()
+
+      const blogToView = blogsAtStart[0]
+
+      const resultBlog = await api
+        .get(`/api/blogs/${blogToView.id}`)
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+
+      const processedBlogToView = JSON.parse(JSON.stringify(blogToView))
+
+      expect(resultBlog.body).toEqual(processedBlogToView)
+    })
+
+    test('fails with statuscode 404 if blog does not exist', async () => {
+      const validNonExistingId = await helper.nonExistingId()
+
+      console.log(validNonExistingId)
+
+      await api
+        .get(`/api/blogs/${validNonExistingId}`)
+        .expect(404)
+    })
+
+    test('fails with statuscode 400 id is invalid', async () => {
+      const invalidId = 'invalidid'
+
+      await api
+        .get(`/api/blogs/${invalidId}`)
+        .expect(400)
+    })
+
   })
 
   describe('addition of a new blog', () => {
