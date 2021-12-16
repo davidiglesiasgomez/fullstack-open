@@ -84,6 +84,7 @@ describe('when there is initially some blogs saved', () => {
 
       const blog = response.body.find(r => r.title === newBlog.title)
 
+      expect(response.body).toHaveLength(helper.initialBlogs.length + 1)
       expect(blog.likes).toBeDefined()
       expect(blog.likes).toBe(0)
     })
@@ -97,6 +98,9 @@ describe('when there is initially some blogs saved', () => {
         .post('/api/blogs')
         .send(newBlog)
         .expect(400)
+
+      const blogsAtEnd = await helper.blogsInDb()
+      expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
     })
 
   })
