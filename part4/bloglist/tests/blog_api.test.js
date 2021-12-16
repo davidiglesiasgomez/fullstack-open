@@ -121,6 +121,27 @@ test('new blog can be added', async () => {
   )
 })
 
+test('new blog without likes at the request defaults to zero', async () => {
+  const newBlog = {
+    'title': 'Test blog',
+    'author': 'Unknown',
+    'url': 'foo.bar.com'
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const response = await api.get('/api/blogs')
+
+  const blog = response.body.find(r => r.title === newBlog.title)
+
+  expect(blog.likes).toBeDefined()
+  expect(blog.likes).toBe(0)
+})
+
 afterAll(async () => {
   await mongoose.connection.close()
 })
