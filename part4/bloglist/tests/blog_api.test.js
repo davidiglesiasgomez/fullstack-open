@@ -58,8 +58,6 @@ describe('when there is initially some blogs saved', () => {
     test('fails with statuscode 404 if blog does not exist', async () => {
       const validNonExistingId = await helper.nonExistingId()
 
-      console.log(validNonExistingId)
-
       await api
         .get(`/api/blogs/${validNonExistingId}`)
         .expect(404)

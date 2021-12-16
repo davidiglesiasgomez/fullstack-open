@@ -60,6 +60,7 @@ const nonExistingId = async () => {
   const blog = new Blog({
     'title': 'Test blog',
     'author': 'Unknown',
+    'url': 'foo.bar.com'
   })
   await blog.save()
   await blog.remove()
