@@ -172,6 +172,58 @@ describe('when there is initially some blogs saved', () => {
 
   })
 
+  describe('updating a blog', () => {
+
+    test('a blog can be update and returns the blog modified and a 200 code', async () => {
+
+      const blogsAtStart = await helper.blogsInDb()
+
+      const blogToUpdate = blogsAtStart[0]
+      blogToUpdate.likes = blogToUpdate.likes + 1
+
+      const resultBlog = await api
+        .post(`/api/blogs/${blogToUpdate.id}`)
+        .send(blogToUpdate)
+        .expect(202)
+        .expect('Content-Type', /application\/json/)
+
+      const processedBlogToUpdate = JSON.parse(JSON.stringify(blogToUpdate))
+
+      expect(resultBlog.body).toEqual(processedBlogToUpdate)
+
+    })
+
+    test('a blog that not exists must return a 404 code', async () => {
+
+      const blogsAtStart = await helper.blogsInDb()
+
+      const blogToUpdate = blogsAtStart[0]
+
+      await api
+        .delete(`/api/blogs/${blogToUpdate.id}`)
+
+      await api
+        .post(`/api/blogs/${blogToUpdate.id}`)
+        .send(blogToUpdate)
+        .expect(404)
+
+    })
+
+    test('fails with statuscode 400 id is invalid', async () => {
+
+      const blogsAtStart = await helper.blogsInDb()
+
+      const blogToUpdate = blogsAtStart[0]
+      blogToUpdate.id = 'invalidid'
+
+      await api
+        .post(`/api/blogs/${blogToUpdate.id}`)
+        .send(blogToUpdate)
+        .expect(400)
+    })
+
+  })
+
 })
 
 afterAll(async () => {
