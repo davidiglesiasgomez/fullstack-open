@@ -184,7 +184,7 @@ describe('when there is initially some blogs saved', () => {
       const resultBlog = await api
         .put(`/api/blogs/${blogToUpdate.id}`)
         .send(blogToUpdate)
-        .expect(202)
+        .expect(200)
         .expect('Content-Type', /application\/json/)
 
       const processedBlogToUpdate = JSON.parse(JSON.stringify(blogToUpdate))
