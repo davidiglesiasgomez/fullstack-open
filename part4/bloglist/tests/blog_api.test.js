@@ -137,6 +137,41 @@ describe('when there is initially some blogs saved', () => {
 
   })
 
+  describe('deleting a blog', () => {
+
+    test('a blog can be delete and returns a 204 code', async () => {
+
+      await api
+        .delete(`/api/blogs/${helper.initialBlogs[0]._id}`)
+        .expect(204)
+
+      const response = await api.get('/api/blogs')
+
+      expect(response.body).toHaveLength(helper.initialBlogs.length - 1)
+    })
+
+    test('second call to delete the same blog must return a 404 code', async () => {
+
+      await api
+        .delete(`/api/blogs/${helper.initialBlogs[0]._id}`)
+        .expect(204)
+
+      await api
+        .delete(`/api/blogs/${helper.initialBlogs[0]._id}`)
+        .expect(404)
+
+    })
+
+    test('fails with statuscode 400 id is invalid', async () => {
+      const invalidId = 'invalidid'
+
+      await api
+        .delete(`/api/blogs/${invalidId}`)
+        .expect(400)
+    })
+
+  })
+
 })
 
 afterAll(async () => {
