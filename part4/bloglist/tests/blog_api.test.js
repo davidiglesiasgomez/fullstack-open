@@ -182,7 +182,7 @@ describe('when there is initially some blogs saved', () => {
       blogToUpdate.likes = blogToUpdate.likes + 1
 
       const resultBlog = await api
-        .post(`/api/blogs/${blogToUpdate.id}`)
+        .put(`/api/blogs/${blogToUpdate.id}`)
         .send(blogToUpdate)
         .expect(202)
         .expect('Content-Type', /application\/json/)
@@ -203,7 +203,7 @@ describe('when there is initially some blogs saved', () => {
         .delete(`/api/blogs/${blogToUpdate.id}`)
 
       await api
-        .post(`/api/blogs/${blogToUpdate.id}`)
+        .put(`/api/blogs/${blogToUpdate.id}`)
         .send(blogToUpdate)
         .expect(404)
 
@@ -217,7 +217,7 @@ describe('when there is initially some blogs saved', () => {
       blogToUpdate.id = 'invalidid'
 
       await api
-        .post(`/api/blogs/${blogToUpdate.id}`)
+        .put(`/api/blogs/${blogToUpdate.id}`)
         .send(blogToUpdate)
         .expect(400)
     })
