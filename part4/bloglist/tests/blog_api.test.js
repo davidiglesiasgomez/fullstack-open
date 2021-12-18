@@ -9,6 +9,10 @@ describe('when there is initially some blogs saved', () => {
 
   beforeEach(async () => {
     await Blog.deleteMany({})
+
+    const users = await helper.usersInDb()
+    helper.initialBlogs.map(blog => blog.user = users[0].id)
+
     await Blog.insertMany(helper.initialBlogs)
   })
 
@@ -36,6 +40,15 @@ describe('when there is initially some blogs saved', () => {
     const response = await api.get('/api/blogs')
 
     expect(response.body[0].id).toBeDefined()
+  })
+
+  test('the returned blos has to had the user creator information', async () => {
+    const response = await api.get('/api/blogs')
+
+    response.body.map(blog => {
+      console.log(Object.keys(blog.user))
+      expect(Object.keys(blog.user)).toEqual(['username', 'name', 'id'])
+    })
   })
 
   describe('viewing a specific blog', () => {
