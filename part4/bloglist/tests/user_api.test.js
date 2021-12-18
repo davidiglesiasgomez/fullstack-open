@@ -84,6 +84,27 @@ describe('when there is initially one user in db', () => {
     expect(usersAtEnd).toHaveLength(usersAtStart.length)
   })
 
+  test('creation fails with password length less than 3 characters', async () => {
+    const usersAtStart = await helper.usersInDb()
+
+    const newUser = {
+      username: 'user',
+      name: 'Superuser',
+      password: 'se',
+    }
+
+    const response = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    expect(response.body.error).toContain('`password` must be at least 3 characters long')
+
+    const usersAtEnd = await helper.usersInDb()
+    expect(usersAtEnd).toHaveLength(usersAtStart.length)
+  })
+
 })
 
 afterAll(async () => {
