@@ -135,6 +135,25 @@ describe('when there is initially some blogs saved', () => {
       expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
     })
 
+    test('new blog must have information of creator user', async () => {
+      const newBlog = {
+        'title': 'Test blog',
+        'author': 'Unknown',
+        'url': 'foo.bar.com'
+      }
+
+      const response = await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(201)
+        .expect('Content-Type', /application\/json/)
+
+      const blogsAtEnd = await helper.blogsInDb()
+      expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
+
+      expect(response.body.user).toBeDefined()
+    })
+
   })
 
   describe('deleting a blog', () => {
