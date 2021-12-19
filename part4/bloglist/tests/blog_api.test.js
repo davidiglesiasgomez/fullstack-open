@@ -166,6 +166,22 @@ describe('when there is initially some blogs saved', () => {
       expect(response.body.user).toBeDefined()
     })
 
+    test('error token missing or invalid on adding a blog without auth', async () => {
+      const newBlog = {
+        'title': 'Test blog',
+        'author': 'Unknown',
+        'url': 'foo.bar.com'
+      }
+
+      const response = await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(401)
+        .expect('Content-Type', /application\/json/)
+
+      expect(response.body.error).toContain('token missing or invalid')
+    })
+
   })
 
   describe('deleting a blog', () => {
