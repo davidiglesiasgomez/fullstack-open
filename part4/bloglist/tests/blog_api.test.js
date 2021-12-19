@@ -4,6 +4,7 @@ const app = require('../app')
 const api = supertest(app)
 const Blog = require('../models/blog')
 const helper = require('./test_helper')
+const jwt = require('jsonwebtoken')
 
 describe('when there is initially some blogs saved', () => {
 
@@ -180,6 +181,33 @@ describe('when there is initially some blogs saved', () => {
         .expect('Content-Type', /application\/json/)
 
       expect(response.body.error).toContain('token missing or invalid')
+    })
+
+    test('new blog creator user has to be the same of the auth token', async () => {
+      const newBlog = {
+        'title': 'Test blog',
+        'author': 'Unknown',
+        'url': 'foo.bar.com'
+      }
+
+      const users = await helper.usersInDb()
+
+      const userForToken = {
+        username: users[0].username,
+        id: users[0].id,
+      }
+
+      const token = jwt.sign(userForToken, process.env.SECRET)
+
+      const response = await api
+        .post('/api/blogs')
+        .set('Authorization', `Bearer ${token}`)
+        .send(newBlog)
+        .expect(201)
+        .expect('Content-Type', /application\/json/)
+
+      expect(response.body.user).toBeDefined()
+      expect(response.body.user).toEqual(users[0].id)
     })
 
   })
