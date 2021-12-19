@@ -26,6 +26,10 @@ describe('when there is initially one user in db', () => {
     helper.initialBlogs.map(blog => blog.user = users[0].id)
 
     await Blog.insertMany(helper.initialBlogs)
+
+    const blogs = await helper.blogsInDb()
+    blogs.map(blog => user.blogs = user.blogs.concat(blog.id))
+    await user.save()
   })
 
   test('creation succeeds with a fresh username', async () => {
@@ -126,7 +130,7 @@ describe('when there is initially one user in db', () => {
 
     response.body.map(user => {
       user.blogs.map(blog => {
-        expect(Object.keys(blog)).toEqual(['url', 'title', 'author', 'id'])
+        expect(Object.keys(blog)).toEqual(['title', 'author', 'url', 'id'])
       })
     })
   })
