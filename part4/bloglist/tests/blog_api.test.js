@@ -256,6 +256,28 @@ describe('when there is initially some blogs saved', () => {
       expect(response.body.error).toContain('token missing or invalid')
     })
 
+    test('a blog must be deleted only if the creator is the same of the auth token', async () => {
+      const users = await helper.usersInDb()
+
+      const userForToken = {
+        username: users[0].username,
+        id: users[0].id,
+      }
+
+      const token = jwt.sign(userForToken, process.env.SECRET)
+
+      const blog = await Blog.findOne({user: users[0].id})
+
+      await api
+        .delete(`/api/blogs/${blog.id}`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(204)
+
+      const blogsAtEnd = await helper.blogsInDb()
+
+      expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length - 1)
+    })
+
   })
 
   describe('updating a blog', () => {
