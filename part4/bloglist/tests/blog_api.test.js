@@ -245,6 +245,17 @@ describe('when there is initially some blogs saved', () => {
         .expect(400)
     })
 
+    test('error token missing or invalid on deleting a blog without auth', async () => {
+      const blog = await Blog.findOne()
+
+      const response = await api
+        .delete(`/api/blogs/${blog.id}`)
+        .expect(401)
+        .expect('Content-Type', /application\/json/)
+
+      expect(response.body.error).toContain('token missing or invalid')
+    })
+
   })
 
   describe('updating a blog', () => {
