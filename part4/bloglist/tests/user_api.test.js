@@ -5,6 +5,7 @@ const api = supertest(app)
 const User = require('../models/user')
 const helper = require('./test_helper')
 const bcrypt = require('bcrypt')
+const Blog = require('../models/blog')
 
 describe('when there is initially one user in db', () => {
   beforeEach(async () => {
@@ -18,6 +19,13 @@ describe('when there is initially one user in db', () => {
     })
 
     await user.save()
+
+    await Blog.deleteMany({})
+
+    const users = await helper.usersInDb()
+    helper.initialBlogs.map(blog => blog.user = users[0].id)
+
+    await Blog.insertMany(helper.initialBlogs)
   })
 
   test('creation succeeds with a fresh username', async () => {
@@ -103,6 +111,24 @@ describe('when there is initially one user in db', () => {
 
     const usersAtEnd = await helper.usersInDb()
     expect(usersAtEnd).toHaveLength(usersAtStart.length)
+  })
+
+  test('all users are returned', async () => {
+    const usersAtStart = await helper.usersInDb()
+
+    const response = await api.get('/api/users')
+
+    expect(response.body).toHaveLength(usersAtStart.length)
+  })
+
+  test('the returned users has to had the blogs created by the user', async () => {
+    const response = await api.get('/api/users')
+
+    response.body.map(user => {
+      user.blogs.map(blog => {
+        expect(Object.keys(blog)).toEqual(['url', 'title', 'author', 'id'])
+      })
+    })
   })
 
 })

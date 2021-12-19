@@ -42,11 +42,10 @@ describe('when there is initially some blogs saved', () => {
     expect(response.body[0].id).toBeDefined()
   })
 
-  test('the returned blos has to had the user creator information', async () => {
+  test('the returned blogs has to had the user creator information', async () => {
     const response = await api.get('/api/blogs')
 
     response.body.map(blog => {
-      console.log(Object.keys(blog.user))
       expect(Object.keys(blog.user)).toEqual(['username', 'name', 'id'])
     })
   })
