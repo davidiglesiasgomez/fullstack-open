@@ -118,8 +118,11 @@ describe('when there is initially some blogs saved', () => {
         'url': 'foo.bar.com'
       }
 
+      const token = helper.newValidToken(0)
+
       await api
         .post('/api/blogs')
+        .set('authorization', `Bearer ${token}`)
         .send(newBlog)
         .expect(201)
         .expect('Content-Type', /application\/json/)
@@ -138,8 +141,11 @@ describe('when there is initially some blogs saved', () => {
         'author': 'Unknown',
       }
 
+      const token = helper.newValidToken(0)
+
       await api
         .post('/api/blogs')
+        .set('authorization', `Bearer ${token}`)
         .send(newBlog)
         .expect(400)
 
@@ -154,8 +160,11 @@ describe('when there is initially some blogs saved', () => {
         'url': 'foo.bar.com'
       }
 
+      const token = helper.newValidToken(0)
+
       const response = await api
         .post('/api/blogs')
+        .set('authorization', `Bearer ${token}`)
         .send(newBlog)
         .expect(201)
         .expect('Content-Type', /application\/json/)
@@ -189,14 +198,7 @@ describe('when there is initially some blogs saved', () => {
         'url': 'foo.bar.com'
       }
 
-      const users = await helper.usersInDb()
-
-      const userForToken = {
-        username: users[0].username,
-        id: users[0].id,
-      }
-
-      const token = jwt.sign(userForToken, process.env.SECRET)
+      const token = helper.newValidToken(0)
 
       const response = await api
         .post('/api/blogs')
@@ -206,7 +208,7 @@ describe('when there is initially some blogs saved', () => {
         .expect('Content-Type', /application\/json/)
 
       expect(response.body.user).toBeDefined()
-      expect(response.body.user).toEqual(users[0].id)
+      expect(response.body.user).toEqual(helper.initialUsers[0]._id.toString())
     })
 
   })
