@@ -36,7 +36,6 @@ const tokenExtractor = (request, response, next) => {
   }
   request.token = authorization.substring(7)
   request.decodedToken = jwt.verify(request.token, process.env.SECRET)
-  console.log('request.decodedToken', request.decodedToken)
   if (!request.decodedToken || !request.decodedToken.id) {
     next()
   }

@@ -92,8 +92,11 @@ describe('when there is initially some blogs saved', () => {
         'likes': 0
       }
 
+      const token = helper.newValidToken(0)
+
       await api
         .post('/api/blogs')
+        .set('authorization', `Bearer ${token}`)
         .send(newBlog)
         .expect(201)
         .expect('Content-Type', /application\/json/)
