@@ -99,17 +99,6 @@ const usersInDb = async () => {
   return users.map(u => u.toJSON())
 }
 
-const newUser = async () => {
-  const user = new User({
-    username: 'random',
-    name: 'Random user',
-    password: 'randompassword',
-  })
-  await user.save()
-  await user.remove()
-  return user
-}
-
 const newValidToken = ( index ) => {
   const userForToken = {
     username: initialUsers[index].username,
@@ -125,6 +114,5 @@ module.exports = {
   blogsInDb,
   nonExistingId,
   usersInDb,
-  newUser,
   newValidToken
 }
