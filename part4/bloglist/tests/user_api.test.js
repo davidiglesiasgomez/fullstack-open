@@ -5,12 +5,15 @@ const api = supertest(app)
 const User = require('../models/user')
 const helper = require('./test_helper')
 const bcrypt = require('bcrypt')
+const Blog = require('../models/blog')
 
 describe('when there is initially one user in db', () => {
   beforeEach(async () => {
     await User.deleteMany({})
     helper.initialUsers.map(async user => user.passwordHash = await bcrypt.hash('sekret', 10))
     await User.insertMany(helper.initialUsers)
+    await Blog.deleteMany({})
+    await Blog.insertMany(helper.initialBlogs)
   })
 
   test('creation succeeds with a fresh username', async () => {
