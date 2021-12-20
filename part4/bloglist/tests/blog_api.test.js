@@ -10,10 +10,6 @@ describe('when there is initially some blogs saved', () => {
 
   beforeEach(async () => {
     await Blog.deleteMany({})
-
-    const users = await helper.usersInDb()
-    helper.initialBlogs.map(blog => blog.user = users[0].id)
-
     await Blog.insertMany(helper.initialBlogs)
   })
 
