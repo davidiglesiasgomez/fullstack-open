@@ -392,7 +392,7 @@ describe('when there is initially some blogs saved', () => {
 
       const patch = {
         op: 'add',
-        path: 'likes',
+        path: '/likes',
         value: 1
       }
 
@@ -412,7 +412,7 @@ describe('when there is initially some blogs saved', () => {
 
       const patch = {
         op: 'replace',
-        path: 'author',
+        path: '/author',
         value: 'Other value'
       }
 
@@ -432,7 +432,7 @@ describe('when there is initially some blogs saved', () => {
 
       const patch = {
         op: 'add',
-        path: 'likes',
+        path: '/likes',
         value: 1
       }
 
@@ -455,7 +455,7 @@ describe('when there is initially some blogs saved', () => {
 
       const patch = {
         op: 'add',
-        path: 'likes',
+        path: '/likes',
         value: 1
       }
 

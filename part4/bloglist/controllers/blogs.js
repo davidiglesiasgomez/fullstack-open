@@ -78,4 +78,27 @@ blogsRouter.put('/:id', tokenExtractor, async (request, response) => {
 
 })
 
+blogsRouter.patch('/:id', async (request, response) => {
+  const blog = await Blog.findById(request.params.id)
+  if (!blog) {
+    return response.status(404).end()
+  }
+  const patch = {
+    op: request.body.op,
+    path: request.body.path,
+    value: parseInt(request.body.value)
+  }
+  if (patch.op !== 'add' || patch.path !== '/likes' || patch.value !== 1) {
+    return response.status(405).end()
+  }
+  const updateBlog = {
+    likes: blog.likes + patch.value
+  }
+  const updatedBlog = await Blog.findOneAndUpdate({_id: request.params.id}, updateBlog, { new: true, runValidators: true })
+  if (!updatedBlog) {
+    return response.status(404).end()
+  }
+  return response.json(updatedBlog)
+})
+
 module.exports = blogsRouter
