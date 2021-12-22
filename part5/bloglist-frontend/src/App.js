@@ -17,6 +17,14 @@ const App = () => {
     )
   }, [])
 
+  useEffect(() => {
+    const loggedBlogListAppUser = window.localStorage.getItem('loggedBlogListAppUser')
+    if (loggedBlogListAppUser) {
+      const user = JSON.parse(loggedBlogListAppUser)
+      setUser(user)
+    }
+  }, [])
+
   const handleMessage = (message, type) => {
     setErrorMessage({ message: message, type: type })
     setTimeout(() => {
@@ -33,6 +41,12 @@ const App = () => {
         username,
         password,
       })
+
+      window.localStorage.setItem(
+        'loggedBlogListAppUser',
+        JSON.stringify(user)
+      )
+
       setUser(user)
       setUsername('')
       setPassword('')
@@ -43,6 +57,12 @@ const App = () => {
 
   const handleLogout = async (event) => {
     event.preventDefault()
+
+    window.localStorage.setItem(
+      'loggedBlogListAppUser',
+      JSON.stringify(null)
+    )
+
     setUser(null)
   }
 
