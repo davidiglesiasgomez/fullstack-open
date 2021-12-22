@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
+import blogService from '../services/blogs'
 
 const Blog = ({ blog }) => {
   const [visible, setVisible] = useState(false)
+  const [thisBlog, setThisBlog] = useState(blog)
 
   const blogStyle = {
     paddingTop: 10,
@@ -15,14 +17,27 @@ const Blog = ({ blog }) => {
     setVisible(!visible)
   }
 
+  const handleLike = async (event) => {
+    event.preventDefault()
+
+    const patchObject = {
+      op: 'add',
+      path: '/likes',
+      value: 1
+    }
+
+    blog = await blogService.addLike(thisBlog.id, patchObject)
+    setThisBlog(blog)
+  }
+
   return (
     <div style={blogStyle}>
-      <strong>{blog.title}</strong> <button onClick={toggleVisible}>{ visible ? 'hide' : 'show' }</button>
+      <strong>{thisBlog.title}</strong> <button onClick={toggleVisible}>{ visible ? 'hide' : 'show' }</button>
       { visible &&
       <>
-        <br />{blog.url}
-        <br />{blog.likes} <button>like</button>
-        <br />{blog.author}
+        <br />{thisBlog.url}
+        <br />{thisBlog.likes} <button onClick={handleLike}>like</button>
+        <br />{thisBlog.author}
       </>
       }
     </div>
