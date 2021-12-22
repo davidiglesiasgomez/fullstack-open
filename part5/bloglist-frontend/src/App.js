@@ -3,6 +3,8 @@ import Blog from './components/Blog'
 import blogService from './services/blogs'
 import Notification from './components/Notification'
 import loginService from './services/login'
+import LoginForm from './components/LoginForm'
+import BlogForm from './components/BlogForm'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -97,56 +99,32 @@ const App = () => {
 
   }
 
-  if (user === null) {
-    return (
-      <div>
-        <h2>Log in to application</h2>
-        <Notification message={errorMessage} />
-
-        <form onSubmit={handleLogin}>
-          <div>
-            username <input
-              type="text"
-              value={username}
-              name="Username"
-              onChange={({ target }) => setUsername(target.value)}
-            />
-          </div>
-          <div>
-            password <input
-              type="password"
-              value={password}
-              name="Password"
-              onChange={({ target }) => setPassword(target.value)}
-            />
-          </div>
-          <button type="submit">login</button>
-        </form>
-      </div>
-    )
-  }
-
   return (
     <div>
-      <h2>blogs</h2>
-      <p>{user.name} logged in <button onClick={handleLogout}>logout</button></p>
+
+      <h1>Blogs</h1>
+
       <Notification message={errorMessage} />
 
-      <form onSubmit={handleAddBlog}>
-        <br />title: <input
-          value={newTitle}
-          onChange={({ target }) => setTitle(target.value)}
-        />
-        <br />author: <input
-          value={newAuthor}
-          onChange={({ target }) => setAuthor(target.value)}
-        />
-        <br />url: <input
-          value={newUrl}
-          onChange={({ target }) => setUrl(target.value)}
-        />
-        <br /><button type="submit">save</button>
-      </form>
+      {user === null && <LoginForm
+        handleLogin={handleLogin}
+        username={username}
+        setUsername={setUsername}
+        password={password}
+        setPassword={setPassword}
+      />}
+      {user !== null && <p>{user.name} logged in <button onClick={handleLogout}>logout</button></p>}
+      {user !== null && <BlogForm
+        handleAddBlog={handleAddBlog}
+        newTitle={newTitle}
+        setTitle={setTitle}
+        newAuthor={newAuthor}
+        setAuthor={setAuthor}
+        newUrl={newUrl}
+        setUrl={setUrl}
+      />}
+
+      <h2>blogs</h2>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
