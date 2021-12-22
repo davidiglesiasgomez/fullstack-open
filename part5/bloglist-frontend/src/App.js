@@ -41,6 +41,11 @@ const App = () => {
     }
   }
 
+  const handleLogout = async (event) => {
+    event.preventDefault()
+    setUser(null)
+  }
+
   if (user === null) {
     return (
       <div>
@@ -49,8 +54,7 @@ const App = () => {
 
         <form onSubmit={handleLogin}>
           <div>
-            username
-            <input
+            username <input
               type="text"
               value={username}
               name="Username"
@@ -58,8 +62,7 @@ const App = () => {
             />
           </div>
           <div>
-            password
-              <input
+            password <input
               type="password"
               value={password}
               name="Password"
@@ -75,7 +78,7 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
-      <p>{user.name} logged in</p>
+      <p>{user.name} logged in <button onClick={handleLogout}>logout</button></p>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
