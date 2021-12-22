@@ -383,6 +383,91 @@ describe('when there is initially some blogs saved', () => {
 
   })
 
+  describe('linking a blog', () => {
+
+    test('a blog can be linking and returns the blog modified and a 200 code', async () => {
+
+      const blogToUpdate = helper.initialBlogs[0]
+      blogToUpdate.likes = blogToUpdate.likes + 1
+
+      const patch = {
+        op: 'add',
+        path: 'likes',
+        value: 1
+      }
+
+      const response = await api
+        .patch(`/api/blogs/${blogToUpdate._id}`)
+        .send(patch)
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+
+      expect(response.body.likes).toEqual(blogToUpdate.likes)
+
+    })
+
+    test('try an op/value not allowed must return a 405 code', async () => {
+
+      const blogToUpdate = helper.initialBlogs[0]
+
+      const patch = {
+        op: 'replace',
+        path: 'author',
+        value: 'Other value'
+      }
+
+      await api
+        .patch(`/api/blogs/${blogToUpdate._id}`)
+        .send(patch)
+        .expect(405)
+
+    })
+
+    test('a blog that not exists must return a 404 code', async () => {
+
+      const token = helper.newValidToken(0)
+
+      const blogToUpdate = helper.initialBlogs[0]
+      blogToUpdate.likes = blogToUpdate.likes + 1
+
+      const patch = {
+        op: 'add',
+        path: 'likes',
+        value: 1
+      }
+
+      await api
+        .delete(`/api/blogs/${blogToUpdate._id}`)
+        .set('Authorization', `Bearer ${token}`)
+
+      await api
+        .patch(`/api/blogs/${blogToUpdate._id}`)
+        .send(patch)
+        .expect(404)
+
+    })
+
+    test('fails with statuscode 400 id is invalid', async () => {
+
+      const blogToUpdate = helper.initialBlogs[0]
+      blogToUpdate.likes = blogToUpdate.likes + 1
+      blogToUpdate._id = 'invalidid'
+
+      const patch = {
+        op: 'add',
+        path: 'likes',
+        value: 1
+      }
+
+      await api
+        .patch(`/api/blogs/${blogToUpdate._id}`)
+        .send(patch)
+        .expect(400)
+
+    })
+
+  })
+
 })
 
 afterAll(async () => {
