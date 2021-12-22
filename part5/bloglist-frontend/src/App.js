@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import Notification from './components/Notification'
 import loginService from './services/login'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
+import Togglable from './components/Togglable'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -16,6 +17,8 @@ const App = () => {
   const [newAuthor, setAuthor] = useState('')
   const [newUrl, setUrl] = useState('')
 
+  const blogFormRef = useRef()
+
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
@@ -25,8 +28,9 @@ const App = () => {
   useEffect(() => {
     const loggedBlogListAppUser = window.localStorage.getItem('loggedBlogListAppUser')
     if (loggedBlogListAppUser) {
-      const user = JSON.parse(loggedBlogListAppUser)
-      setUser(user)
+      const loggedUser = JSON.parse(loggedBlogListAppUser)
+      setUser(loggedUser)
+      blogService.setToken(loggedUser.token)
     }
   }, [])
 
@@ -92,6 +96,7 @@ const App = () => {
       setTitle('')
       setAuthor('')
       setUrl('')
+      blogFormRef.current.toggleVisibility()
     } catch (exception) {
       // console.log({exception})
       handleMessage(exception.response.data.error, 'error')
@@ -106,23 +111,31 @@ const App = () => {
 
       <Notification message={errorMessage} />
 
-      {user === null && <LoginForm
-        handleLogin={handleLogin}
-        username={username}
-        setUsername={setUsername}
-        password={password}
-        setPassword={setPassword}
-      />}
+      {user === null &&
+        <Togglable buttonLabel="login">
+          <LoginForm
+            handleLogin={handleLogin}
+            username={username}
+            setUsername={setUsername}
+            password={password}
+            setPassword={setPassword}
+          />
+        </Togglable>
+      }
       {user !== null && <p>{user.name} logged in <button onClick={handleLogout}>logout</button></p>}
-      {user !== null && <BlogForm
-        handleAddBlog={handleAddBlog}
-        newTitle={newTitle}
-        setTitle={setTitle}
-        newAuthor={newAuthor}
-        setAuthor={setAuthor}
-        newUrl={newUrl}
-        setUrl={setUrl}
-      />}
+      {user !== null &&
+      <Togglable buttonLabel="create new blog" ref={blogFormRef}>
+        <BlogForm
+          handleAddBlog={handleAddBlog}
+          newTitle={newTitle}
+          setTitle={setTitle}
+          newAuthor={newAuthor}
+          setAuthor={setAuthor}
+          newUrl={newUrl}
+          setUrl={setUrl}
+        />
+      </Togglable>
+      }
 
       <h2>blogs</h2>
       {blogs.map(blog =>
