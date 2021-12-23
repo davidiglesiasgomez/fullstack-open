@@ -391,9 +391,9 @@ describe('when there is initially some blogs saved', () => {
       blogToUpdate.likes = blogToUpdate.likes + 1
 
       const patch = {
-        op: 'add',
+        op: 'replace',
         path: '/likes',
-        value: 1
+        value: blogToUpdate.likes
       }
 
       const response = await api
@@ -431,9 +431,9 @@ describe('when there is initially some blogs saved', () => {
       blogToUpdate.likes = blogToUpdate.likes + 1
 
       const patch = {
-        op: 'add',
+        op: 'replace',
         path: '/likes',
-        value: 1
+        value: blogToUpdate.likes
       }
 
       await api
@@ -454,9 +454,9 @@ describe('when there is initially some blogs saved', () => {
       blogToUpdate._id = 'invalidid'
 
       const patch = {
-        op: 'add',
+        op: 'replace',
         path: '/likes',
-        value: 1
+        value: blogToUpdate.likes
       }
 
       await api

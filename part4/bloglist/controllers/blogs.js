@@ -88,11 +88,11 @@ blogsRouter.patch('/:id', async (request, response) => {
     path: request.body.path,
     value: parseInt(request.body.value)
   }
-  if (patch.op !== 'add' || patch.path !== '/likes' || patch.value !== 1) {
+  if (patch.op !== 'replace' || patch.path !== '/likes') {
     return response.status(405).end()
   }
   const updateBlog = {
-    likes: blog.likes + patch.value
+    likes: patch.value
   }
   const updatedBlog = await Blog.findOneAndUpdate({_id: request.params.id}, updateBlog, { new: true, runValidators: true })
   if (!updatedBlog) {
