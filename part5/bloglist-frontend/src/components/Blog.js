@@ -20,13 +20,7 @@ const Blog = ({ blog }) => {
   const handleLike = async (event) => {
     event.preventDefault()
 
-    const patchObject = {
-      op: 'add',
-      path: '/likes',
-      value: 1
-    }
-
-    blog = await blogService.addLike(thisBlog.id, patchObject)
+    blog = await blogService.addLike(thisBlog)
     setThisBlog(blog)
   }
 

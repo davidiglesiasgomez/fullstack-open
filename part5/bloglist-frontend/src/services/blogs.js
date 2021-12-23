@@ -20,8 +20,15 @@ const create = async newObject => {
   return response.data
 }
 
-const addLike = async (blogId, patchObject) => {
-  const response = await axios.patch(`${baseUrl}/${blogId}`, patchObject)
+const addLike = async blog => {
+
+  const patchObject = {
+    op: 'replace',
+    path: '/likes',
+    value: blog.likes + 1
+  }
+
+  const response = await axios.patch(`${baseUrl}/${blog.id}`, patchObject)
   return response.data
 }
 
