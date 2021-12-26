@@ -16,8 +16,14 @@ const App = () => {
 
   const blogFormRef = useRef()
 
+  const orderByLikes = (blogA, blogB) => {
+    if (blogA.likes > blogB.likes) return -1
+    if (blogA.likes < blogB.likes) return 1
+    return 0
+  }
+
   useEffect(() => {
-    blogService.getAll().then(blogs => setBlogs( blogs ))
+    blogService.getAll().then(blogs => setBlogs( blogs.sort(orderByLikes) ))
   }, [])
 
   useEffect(() => {
@@ -101,11 +107,7 @@ const App = () => {
         blog.id === blogObj.id
         ? likedBlog
         : blog
-      ).sort(function(a, b){
-        if (a.likes > b.likes) return -1
-        if (a.likes < b.likes) return 1
-        return 0
-      }) )
+      ).sort(orderByLikes) )
       return likedBlog
 
     } catch (exception) {
