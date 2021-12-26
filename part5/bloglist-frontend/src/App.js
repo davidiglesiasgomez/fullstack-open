@@ -91,6 +91,22 @@ const App = () => {
 
   }
 
+  const handleRemoveBlog = async (blogObj) => {
+
+    try {
+      await blogService.remove(blogObj)
+
+      handleMessage(`the blog '${blogObj.title}' by '${blogObj.author}' was deleted`, 'success')
+      setBlogs( blogs.filter(blog => { return blog.id !== blogObj.id } ) )
+
+    } catch (exception) {
+
+      handleMessage(exception.response.data.error, 'error')
+
+    }
+
+  }
+
   return (
     <div>
 
@@ -120,7 +136,7 @@ const App = () => {
 
       <h2>blogs</h2>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} user={user} />
+        <Blog key={blog.id} blog={blog} user={user} handleRemoveBlog={handleRemoveBlog} />
       )}
     </div>
   )

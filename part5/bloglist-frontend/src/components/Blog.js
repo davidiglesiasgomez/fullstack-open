@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import blogService from '../services/blogs'
 
-const Blog = ({ blog, user }) => {
+const Blog = ({ blog, user, handleRemoveBlog }) => {
   const [visible, setVisible] = useState(false)
   const [thisBlog, setThisBlog] = useState(blog)
 
@@ -29,7 +29,7 @@ const Blog = ({ blog, user }) => {
     if (!window.confirm(`Remove blog ${thisBlog.title} by ${thisBlog.author}`)) {
       return
     }
-    await blogService.remove(thisBlog)
+    await handleRemoveBlog(thisBlog)
   }
 
   return (
