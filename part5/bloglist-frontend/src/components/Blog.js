@@ -26,12 +26,12 @@ const Blog = ({ blog }) => {
 
   return (
     <div style={blogStyle}>
-      <strong>{thisBlog.title}</strong> <button onClick={toggleVisible}>{ visible ? 'hide' : 'show' }</button>
+      <strong>{thisBlog.title}</strong> by {thisBlog.author} <button onClick={toggleVisible}>{ visible ? 'hide' : 'show' }</button>
       { visible &&
       <>
         <br />{thisBlog.url}
         <br />{thisBlog.likes} <button onClick={handleLike}>like</button>
-        <br />{thisBlog.author}
+        <br />{thisBlog.user.name}
       </>
       }
     </div>
