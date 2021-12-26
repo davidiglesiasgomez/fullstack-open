@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
-import blogService from '../services/blogs'
 
-const Blog = ({ blog, user, handleRemoveBlog }) => {
+const Blog = ({ blog, user, handleLikeBlog, handleRemoveBlog }) => {
   const [visible, setVisible] = useState(false)
   const [thisBlog, setThisBlog] = useState(blog)
 
@@ -19,8 +18,7 @@ const Blog = ({ blog, user, handleRemoveBlog }) => {
 
   const handleLike = async (event) => {
     event.preventDefault()
-
-    blog = await blogService.addLike(thisBlog)
+    blog = await handleLikeBlog(thisBlog)
     setThisBlog(blog)
   }
 

@@ -91,6 +91,31 @@ const App = () => {
 
   }
 
+  const handleLikeBlog = async (blogObj) => {
+
+    try {
+      const likedBlog = await blogService.addLike(blogObj)
+
+      handleMessage(`the blog '${blogObj.title}' by '${blogObj.author}' was liked`, 'success')
+      setBlogs( blogs.map(blog =>
+        blog.id === blogObj.id
+        ? likedBlog
+        : blog
+      ).sort(function(a, b){
+        if (a.likes > b.likes) return -1
+        if (a.likes < b.likes) return 1
+        return 0
+      }) )
+      return likedBlog
+
+    } catch (exception) {
+
+      handleMessage(exception.response.data.error, 'error')
+
+    }
+
+  }
+
   const handleRemoveBlog = async (blogObj) => {
 
     try {
@@ -136,7 +161,7 @@ const App = () => {
 
       <h2>blogs</h2>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} user={user} handleRemoveBlog={handleRemoveBlog} />
+        <Blog key={blog.id} blog={blog} user={user} handleLikeBlog={handleLikeBlog} handleRemoveBlog={handleRemoveBlog} />
       )}
     </div>
   )
