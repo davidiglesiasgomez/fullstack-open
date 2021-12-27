@@ -105,8 +105,8 @@ const App = () => {
       handleMessage(`the blog '${blogObj.title}' by '${blogObj.author}' was liked`, 'success')
       setBlogs( blogs.map(blog =>
         blog.id === blogObj.id
-        ? likedBlog
-        : blog
+          ? likedBlog
+          : blog
       ).sort(orderByLikes) )
       return likedBlog
 

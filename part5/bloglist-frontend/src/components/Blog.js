@@ -19,6 +19,7 @@ const Blog = ({
   }
 
   const toggleVisible = (event) => {
+    event.preventDefault()
     setVisible(!visible)
   }
 
