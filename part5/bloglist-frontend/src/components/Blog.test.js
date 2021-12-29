@@ -1,26 +1,61 @@
 import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
-import { render } from '@testing-library/react'
+import { render, fireEvent } from '@testing-library/react'
 import Blog from './blog'
 
-test('renders content', () => {
-  const blog = {
-    title: 'Some text',
-    author: 'Some author',
-    likes: 0,
-    url: 'foo.bar.com'
-  }
+describe('<Blog />', () => {
 
-  const component = render(
-    <Blog blog={blog} user={{}} handleRemoveBlog={() => {}} handleLikeBlog={() => {}} />
-  )
+  test('renders content', () => {
+    const blog = {
+      title: 'Some text',
+      author: 'Some author',
+      likes: 0,
+      url: 'foo.bar.com'
+    }
 
-  // component.debug()
+    const component = render(
+      <Blog blog={blog} user={{}} handleRemoveBlog={() => {}} handleLikeBlog={() => {}} />
+    )
 
-  expect(component.container).toHaveTextContent(`${blog.title} by ${blog.author}`)
+    // component.debug()
 
-  expect(component.container.querySelector('.url')).toBeNull()
+    expect(component.container).toHaveTextContent(`${blog.title} by ${blog.author}`)
 
-  expect(component.container.querySelector('.likes')).toBeNull()
+    expect(component.container.querySelector('.url')).toBeNull()
+
+    expect(component.container.querySelector('.likes')).toBeNull()
+
+  })
+
+  test('clicking the button shows likes and url', () => {
+    const user = {
+      user: 'root',
+      username: 'Superuser'
+    }
+
+    const blog = {
+      title: 'Some text',
+      author: 'Some author',
+      likes: 0,
+      url: 'foo.bar.com',
+      user: user
+    }
+
+    const component = render(
+      <Blog blog={blog} user={user} handleRemoveBlog={() => {}} handleLikeBlog={() => {}} />
+    )
+
+    const button = component.getByText('show')
+    fireEvent.click(button)
+
+    // component.debug()
+
+    expect(component.container).toHaveTextContent(`${blog.title} by ${blog.author}`)
+
+    expect(component.container.querySelector('.url')).toHaveTextContent(blog.url)
+
+    expect(component.container.querySelector('.likes')).toHaveTextContent(`likes: ${blog.likes}`)
+
+  })
 
 })
