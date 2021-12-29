@@ -6,7 +6,7 @@ const BlogForm = ({ handleAddBlog }) => {
   const [newAuthor, setAuthor] = useState('')
   const [newUrl, setUrl] = useState('')
 
-  const addBlog = async (event) => {
+  const addBlog = (event) => {
     event.preventDefault()
 
     const newBlogObj = {
@@ -15,7 +15,7 @@ const BlogForm = ({ handleAddBlog }) => {
       url: newUrl
     }
 
-    await handleAddBlog(newBlogObj)
+    handleAddBlog(newBlogObj)
 
     setTitle('')
     setAuthor('')
@@ -27,14 +27,17 @@ const BlogForm = ({ handleAddBlog }) => {
     <h2>Blog form</h2>
     <form onSubmit={addBlog}>
       <br />title: <input
+        id="title"
         value={newTitle}
         onChange={({ target }) => setTitle(target.value)}
       />
       <br />author: <input
+        id="author"
         value={newAuthor}
         onChange={({ target }) => setAuthor(target.value)}
       />
       <br />url: <input
+        id="url"
         value={newUrl}
         onChange={({ target }) => setUrl(target.value)}
       />
