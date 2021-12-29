@@ -108,7 +108,6 @@ const App = () => {
           ? likedBlog
           : blog
       ).sort(orderByLikes) )
-      return likedBlog
 
     } catch (exception) {
 
@@ -119,6 +118,10 @@ const App = () => {
   }
 
   const handleRemoveBlog = async (blogObj) => {
+
+    if (!window.confirm(`Remove blog ${blogObj.title} by ${blogObj.author}`)) {
+      return
+    }
 
     try {
       await blogService.remove(blogObj)

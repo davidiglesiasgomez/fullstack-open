@@ -8,7 +8,6 @@ const Blog = ({
   handleRemoveBlog
 }) => {
   const [visible, setVisible] = useState(false)
-  const [thisBlog, setThisBlog] = useState(blog)
 
   const blogStyle = {
     paddingTop: 10,
@@ -23,32 +22,18 @@ const Blog = ({
     setVisible(!visible)
   }
 
-  const handleLike = async (event) => {
-    event.preventDefault()
-    blog = await handleLikeBlog(thisBlog)
-    setThisBlog(blog)
-  }
-
-  const handleRemove = async (event) => {
-    event.preventDefault()
-    if (!window.confirm(`Remove blog ${thisBlog.title} by ${thisBlog.author}`)) {
-      return
-    }
-    await handleRemoveBlog(thisBlog)
-  }
-
   return (
     <div style={blogStyle}>
-      <strong>{thisBlog.title}</strong> by {thisBlog.author} <button onClick={toggleVisible}>{ visible ? 'hide' : 'show' }</button>
+      <strong>{blog.title}</strong> by {blog.author} <button onClick={toggleVisible}>{ visible ? 'hide' : 'show' }</button>
       { visible &&
       <>
-        <br /><span className='url'>{thisBlog.url}</span>
-        <br /><span className='likes'>likes: {thisBlog.likes}</span> <button onClick={handleLike}>like</button>
-        <br />{thisBlog.user.name}
-        { user.username === thisBlog.user.username &&
+        <br /><span className='url'>{blog.url}</span>
+        <br /><span className='likes'>likes: {blog.likes}</span> <button onClick={() => handleLikeBlog(blog)}>like</button>
+        <br />{blog.user.name}
+        { user.username === blog.user.username &&
           <>
             <br />
-            <button onClick={handleRemove}>remove</button>
+            <button onClick={() => handleRemoveBlog(blog)}>remove</button>
           </>
         }
       </>
