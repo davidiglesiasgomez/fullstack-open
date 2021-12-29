@@ -42,8 +42,8 @@ const Blog = ({
       <strong>{thisBlog.title}</strong> by {thisBlog.author} <button onClick={toggleVisible}>{ visible ? 'hide' : 'show' }</button>
       { visible &&
       <>
-        <br />{thisBlog.url}
-        <br />{thisBlog.likes} <button onClick={handleLike}>like</button>
+        <br /><span className='url'>{thisBlog.url}</span>
+        <br /><span className='likes'>likes: {thisBlog.likes}</span> <button onClick={handleLike}>like</button>
         <br />{thisBlog.user.name}
         { user.username === thisBlog.user.username &&
           <>
