@@ -28,11 +28,12 @@ const App = () => {
 
   useEffect(() => {
     const loggedBlogListAppUser = window.localStorage.getItem('loggedBlogListAppUser')
-    if (loggedBlogListAppUser) {
-      const loggedUser = JSON.parse(loggedBlogListAppUser)
-      setUser(loggedUser)
-      blogService.setToken(loggedUser.token)
+    if (!loggedBlogListAppUser || loggedBlogListAppUser === 'null') {
+      return
     }
+    const loggedUser = JSON.parse(loggedBlogListAppUser)
+    setUser(loggedUser)
+    blogService.setToken(loggedUser.token)
   }, [])
 
   const handleMessage = (message, type) => {
