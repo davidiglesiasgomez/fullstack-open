@@ -65,4 +65,27 @@ describe('Blog app', function() {
       cy.contains('Blog title by Blog author')
     })
   })
+
+  describe('Like button', function() {
+    beforeEach(function() {
+      cy.visit('http://localhost:3000')
+      cy.contains('login').click()
+      cy.get('input[name="Username"]').type('root')
+      cy.get('input[name="Password"]').type('root')
+      cy.get('#loginButton').click()
+      cy.contains('create new blog').click()
+      cy.get('input#title').type('Blog title')
+      cy.get('input#author').type('Blog author')
+      cy.get('input#url').type('foo.bar.com')
+      cy.get('#addBlogButton').click()
+    })
+
+    it('A blog can be liked', function() {
+      cy.get('button.toggleBlogButton').click()
+      cy.get('span.likes').contains('likes: 0')
+      cy.get('button.likeBlogButton').click()
+      cy.get('span.likes').contains('likes: 1')
+      cy.get('div.success').contains('the blog \'Blog title\' by \'Blog author\' was liked')
+    })
+  })
 })
