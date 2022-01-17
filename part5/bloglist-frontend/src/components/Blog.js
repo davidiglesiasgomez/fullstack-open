@@ -33,7 +33,7 @@ const Blog = ({
         { user && user.username === blog.user.username &&
           <>
             <br />
-            <button onClick={() => handleRemoveBlog(blog)}>remove</button>
+            <button className='deleteBlogButton' onClick={() => handleRemoveBlog(blog)}>remove</button>
           </>
         }
       </>
