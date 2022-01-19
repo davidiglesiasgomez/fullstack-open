@@ -11,92 +11,111 @@ describe('Blog app', function() {
     })
   })
 
-  it('Front page can be opened', function() {
-    cy.visit('http://localhost:3000')
-    cy.contains('Blogs')
-  })
+  // it('Front page can be opened', function() {
+  //   cy.visit('http://localhost:3000')
+  //   cy.contains('Blogs')
+  // })
 
-  it('Login form is shown', function() {
-    cy.visit('http://localhost:3000')
-    cy.contains('login').click()
-    cy.get('input[name="Username"]')
-    cy.get('input[name="Password"]')
-    cy.get('button[type="submit"]')
-  })
+  // it('Login form is shown', function() {
+  //   cy.visit('http://localhost:3000')
+  //   cy.contains('login').click()
+  //   cy.get('input[name="Username"]')
+  //   cy.get('input[name="Password"]')
+  //   cy.get('button[type="submit"]')
+  // })
 
-  describe('Login',function() {
-    it('Succeeds with correct credentials', function() {
-      cy.visit('http://localhost:3000')
-      cy.contains('login').click()
-      cy.get('input[name="Username"]').type('root')
-      cy.get('input[name="Password"]').type('root')
-      cy.get('#loginButton').click()
-      cy.contains('Root logged in')
-    })
+  // describe('Login',function() {
+  //   it('Succeeds with correct credentials', function() {
+  //     cy.visit('http://localhost:3000')
+  //     cy.contains('login').click()
+  //     cy.get('input[name="Username"]').type('root')
+  //     cy.get('input[name="Password"]').type('root')
+  //     cy.get('#loginButton').click()
+  //     cy.contains('Root logged in')
+  //   })
 
-    it('Fails with wrong credentials', function() {
-      cy.visit('http://localhost:3000')
-      cy.contains('login').click()
-      cy.get('input[name="Username"]').type('root')
-      cy.get('input[name="Password"]').type('toor')
-      cy.get('#loginButton').click()
-      cy.get('div.error').contains('Wrong credentials')
-    })
-  })
+  //   it('Fails with wrong credentials', function() {
+  //     cy.visit('http://localhost:3000')
+  //     cy.contains('login').click()
+  //     cy.get('input[name="Username"]').type('root')
+  //     cy.get('input[name="Password"]').type('toor')
+  //     cy.get('#loginButton').click()
+  //     cy.get('div.error').contains('Wrong credentials')
+  //   })
+  // })
 
-  describe('When logged in', function() {
-    beforeEach(function() {
-      cy.login({ username: 'root', password: 'root' })
-    })
+  // describe('When logged in', function() {
+  //   beforeEach(function() {
+  //     cy.login({ username: 'root', password: 'root' })
+  //   })
 
-    it('A blog can be created', function() {
-      cy.contains('create new blog').click()
-      cy.get('input#title').type('Blog title')
-      cy.get('input#author').type('Blog author')
-      cy.get('input#url').type('foo.bar.com')
-      cy.get('#addBlogButton').click()
-      cy.contains('Blogs')
-      cy.contains('Blog title by Blog author')
-    })
-  })
+  //   it('A blog can be created', function() {
+  //     cy.contains('create new blog').click()
+  //     cy.get('input#title').type('Blog title')
+  //     cy.get('input#author').type('Blog author')
+  //     cy.get('input#url').type('foo.bar.com')
+  //     cy.get('#addBlogButton').click()
+  //     cy.contains('Blogs')
+  //     cy.contains('Blog title by Blog author')
+  //   })
+  // })
 
-  describe('Like button', function() {
+  // describe('Like button', function() {
+  //   beforeEach(function() {
+  //     cy.login({ username: 'root', password: 'root' })
+  //     cy.createBlog({ title: 'Blog title', author: 'Blog author', url: 'foo.bar.com' })
+  //   })
+
+  //   it('A blog can be liked', function() {
+  //     cy.get('button.toggleBlogButton').click()
+  //     cy.get('span.likes').contains('likes: 0')
+  //     cy.get('button.likeBlogButton').click()
+  //     cy.get('span.likes').contains('likes: 1')
+  //     cy.get('div.success').contains('the blog \'Blog title\' by \'Blog author\' was liked')
+  //   })
+  // })
+
+  // describe('Delete button', function() {
+  //   beforeEach(function() {
+  //     cy.login({ username: 'root', password: 'root' })
+  //     cy.createBlog({ title: 'Blog title', author: 'Blog author', url: 'foo.bar.com' })
+  //   })
+
+  //   it('A blog can be deleted by user', function() {
+  //     cy.get('button.toggleBlogButton').click()
+  //     cy.get('button.deleteBlogButton').click()
+  //     cy.on('window:confirm', () => true)
+  //     cy.get('div.success').contains('the blog \'Blog title\' by \'Blog author\' was deleted')
+  //   })
+
+  //   it('A blog can\'t be deleted by other user', function() {
+  //     cy.createUser({
+  //       name: 'Other user',
+  //       username: 'other',
+  //       password: 'other'
+  //     })
+  //     cy.login({ username: 'other', password: 'other' })
+  //     cy.get('button.toggleBlogButton').click()
+  //     cy.get('button.deleteBlogButton').should('not.exist')
+  //   })
+  // })
+
+  describe('Order',function() {
     beforeEach(function() {
       cy.login({ username: 'root', password: 'root' })
       cy.createBlog({ title: 'Blog title', author: 'Blog author', url: 'foo.bar.com' })
+      cy.createBlog({ title: 'Second blog title', author: 'Second blog author', url: 'foo.bar.com' })
+      cy.createBlog({ title: 'Third blog title', author: 'Third blog author', url: 'foo.bar.com' })
     })
 
-    it('A blog can be liked', function() {
-      cy.get('button.toggleBlogButton').click()
-      cy.get('span.likes').contains('likes: 0')
-      cy.get('button.likeBlogButton').click()
-      cy.get('span.likes').contains('likes: 1')
-      cy.get('div.success').contains('the blog \'Blog title\' by \'Blog author\' was liked')
-    })
-  })
-
-  describe('Delete button', function() {
-    beforeEach(function() {
-      cy.login({ username: 'root', password: 'root' })
-      cy.createBlog({ title: 'Blog title', author: 'Blog author', url: 'foo.bar.com' })
-    })
-
-    it('A blog can be deleted by user', function() {
-      cy.get('button.toggleBlogButton').click()
-      cy.get('button.deleteBlogButton').click()
-      cy.on('window:confirm', () => true)
-      cy.get('div.success').contains('the blog \'Blog title\' by \'Blog author\' was deleted')
-    })
-
-    it('A blog can\'t be deleted by other user', function() {
-      cy.createUser({
-        name: 'Other user',
-        username: 'other',
-        password: 'other'
+    it('Blogs order by number of likes', function() {
+      cy.get('button.toggleBlogButton').each((el) => {
+        cy.wrap(el).click()
       })
-      cy.login({ username: 'other', password: 'other' })
-      cy.get('button.toggleBlogButton').click()
-      cy.get('button.deleteBlogButton').should('not.exist')
+      cy.get('span.likes').each((el) => {
+        cy.wrap(el).contains('likes: 0')
+      })
+      cy.get('button.likeBlogButton').eq(1).click()
     })
   })
 })
