@@ -24,7 +24,6 @@ const App = () => {
 
   useEffect(() => {
     blogService.getAll().then(blogs => {
-      console.log({blogs})
       setBlogs( blogs.sort(orderByLikes) )
     })
   }, [])

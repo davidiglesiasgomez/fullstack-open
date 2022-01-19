@@ -96,7 +96,7 @@ blogsRouter.patch('/:id', async (request, response) => {
   const updateBlog = {
     likes: patch.value
   }
-  const updatedBlog = await Blog.findOneAndUpdate({_id: request.params.id}, updateBlog, { new: true, runValidators: true })
+  const updatedBlog = await Blog.findOneAndUpdate({_id: request.params.id}, updateBlog, { new: true, runValidators: true }).populate('user', { username: 1, name: 1, id: 1 })
   if (!updatedBlog) {
     return response.status(404).end()
   }
