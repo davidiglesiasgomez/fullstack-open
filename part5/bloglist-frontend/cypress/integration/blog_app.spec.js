@@ -3,22 +3,20 @@
 describe('Blog app', function() {
 
   beforeEach(function() {
-    cy.request('POST', 'http://localhost:3003/api/testing/reset')
-    const user = {
+    cy.resetDatabase()
+    cy.createUser({
       name: 'Root',
       username: 'root',
       password: 'root'
-    }
-    cy.request('POST', 'http://localhost:3003/api/users/', user)
+    })
   })
 
-  // it('front page can be opened', function() {
-  //   cy.visit('http://localhost:3000')
-  //   cy.contains('Blogs')
-  //   cy.contains('Canonical string reduction by Edsger W. Dijkstra')
-  // })
+  it('Front page can be opened', function() {
+    cy.visit('http://localhost:3000')
+    cy.contains('Blogs')
+  })
 
-  it('login form is shown', function() {
+  it('Login form is shown', function() {
     cy.visit('http://localhost:3000')
     cy.contains('login').click()
     cy.get('input[name="Username"]')
@@ -27,7 +25,7 @@ describe('Blog app', function() {
   })
 
   describe('Login',function() {
-    it('succeeds with correct credentials', function() {
+    it('Succeeds with correct credentials', function() {
       cy.visit('http://localhost:3000')
       cy.contains('login').click()
       cy.get('input[name="Username"]').type('root')
@@ -36,7 +34,7 @@ describe('Blog app', function() {
       cy.contains('Root logged in')
     })
 
-    it('fails with wrong credentials', function() {
+    it('Fails with wrong credentials', function() {
       cy.visit('http://localhost:3000')
       cy.contains('login').click()
       cy.get('input[name="Username"]').type('root')
@@ -48,11 +46,7 @@ describe('Blog app', function() {
 
   describe('When logged in', function() {
     beforeEach(function() {
-      cy.visit('http://localhost:3000')
-      cy.contains('login').click()
-      cy.get('input[name="Username"]').type('root')
-      cy.get('input[name="Password"]').type('root')
-      cy.get('#loginButton').click()
+      cy.login({ username: 'root', password: 'root' })
     })
 
     it('A blog can be created', function() {
@@ -68,16 +62,8 @@ describe('Blog app', function() {
 
   describe('Like button', function() {
     beforeEach(function() {
-      cy.visit('http://localhost:3000')
-      cy.contains('login').click()
-      cy.get('input[name="Username"]').type('root')
-      cy.get('input[name="Password"]').type('root')
-      cy.get('#loginButton').click()
-      cy.contains('create new blog').click()
-      cy.get('input#title').type('Blog title')
-      cy.get('input#author').type('Blog author')
-      cy.get('input#url').type('foo.bar.com')
-      cy.get('#addBlogButton').click()
+      cy.login({ username: 'root', password: 'root' })
+      cy.createBlog({ title: 'Blog title', author: 'Blog author', url: 'foo.bar.com' })
     })
 
     it('A blog can be liked', function() {
@@ -91,17 +77,8 @@ describe('Blog app', function() {
 
   describe('Delete button', function() {
     beforeEach(function() {
-      cy.visit('http://localhost:3000')
-      cy.contains('login').click()
-      cy.get('input[name="Username"]').type('root')
-      cy.get('input[name="Password"]').type('root')
-      cy.get('#loginButton').click()
-      cy.contains('create new blog').click()
-      cy.get('input#title').type('Blog title')
-      cy.get('input#author').type('Blog author')
-      cy.get('input#url').type('foo.bar.com')
-      cy.get('#addBlogButton').click()
-      cy.visit('http://localhost:3000')
+      cy.login({ username: 'root', password: 'root' })
+      cy.createBlog({ title: 'Blog title', author: 'Blog author', url: 'foo.bar.com' })
     })
 
     it('A blog can be deleted by user', function() {
@@ -112,17 +89,12 @@ describe('Blog app', function() {
     })
 
     it('A blog can\'t be deleted by other user', function() {
-      const user = {
+      cy.createUser({
         name: 'Other user',
         username: 'other',
         password: 'other'
-      }
-      cy.request('POST', 'http://localhost:3003/api/users/', user)
-      cy.contains('logout').click()
-      cy.contains('login').click()
-      cy.get('input[name="Username"]').type('other')
-      cy.get('input[name="Password"]').type('other')
-      cy.get('#loginButton').click()
+      })
+      cy.login({ username: 'other', password: 'other' })
       cy.get('button.toggleBlogButton').click()
       cy.get('button.deleteBlogButton').should('not.exist')
     })
