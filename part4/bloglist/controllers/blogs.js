@@ -25,7 +25,9 @@ blogsRouter.post('/', tokenExtractor, userExtractor, async (request, response) =
   user.notes = user.blogs.concat(newBlog._id)
   await user.save()
 
-  response.status(201).json(newBlog)
+  const returnedBlog = await Blog.findById(newBlog._id).populate('user', { username: 1, name: 1, id: 1 })
+
+  response.status(201).json(returnedBlog)
 })
 
 blogsRouter.get('/:id', async (request, response) => {

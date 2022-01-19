@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 const Blog = ({
   blog,
-  user,
+  userid,
   handleLikeBlog,
   handleRemoveBlog
 }) => {
@@ -30,7 +30,7 @@ const Blog = ({
         <br /><span className='url'>{blog.url}</span>
         <br /><span className='likes'>likes: {blog.likes}</span> <button className='likeBlogButton' onClick={() => handleLikeBlog(blog)}>like</button>
         <br />{blog.user.name}
-        { user && user.username === blog.user.username &&
+        { userid === blog.user.id &&
           <>
             <br />
             <button className='deleteBlogButton' onClick={() => handleRemoveBlog(blog)}>remove</button>
@@ -44,7 +44,7 @@ const Blog = ({
 
 Blog.propTypes = {
   blog: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired,
+  userid: PropTypes.string.isRequired,
   handleLikeBlog: PropTypes.func.isRequired,
   handleRemoveBlog: PropTypes.func.isRequired
 }
