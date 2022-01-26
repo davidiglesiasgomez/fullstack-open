@@ -37,4 +37,11 @@ const reducer = (state = initialState, action) => {
   return state
 }
 
+export const voteAnecdoteOf = (id) => {
+  return {
+    type: '@anecdote/vote',
+    data: { id }
+  }
+}
+
 export default reducer
