@@ -23,6 +23,17 @@ const reducer = (state = initialState, action) => {
   console.log('state now: ', state)
   console.log('action', action)
 
+  if (action.type === '@anecdote/vote') {
+    const anecdoteToChange = state.find(anecdote => anecdote.id === action.data.id)
+    const changedAnecdote = {
+      ...anecdoteToChange,
+      votes: anecdoteToChange.votes + 1
+    }
+    return state.map(anecdote =>
+      anecdote.id === action.data.id ? changedAnecdote : anecdote
+    )
+  }
+
   return state
 }
 
