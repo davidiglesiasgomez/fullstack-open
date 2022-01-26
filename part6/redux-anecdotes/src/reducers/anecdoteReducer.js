@@ -34,6 +34,10 @@ const reducer = (state = initialState, action) => {
     )
   }
 
+  if (action.type === '@anecdote/new') {
+    return state.concat(action.data)
+  }
+
   return state
 }
 
