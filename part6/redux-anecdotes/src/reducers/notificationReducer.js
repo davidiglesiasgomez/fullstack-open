@@ -1,9 +1,9 @@
 const notificationReducer = (state = '', action) => {
-  console.log('state now: ', state)
-  console.log('action', action)
+  // console.log('state now: ', state)
+  // console.log('action', action)
 
   if (action.type === '@notification/new') {
-    return action.data
+    return action.data.notification
   }
 
   return state
