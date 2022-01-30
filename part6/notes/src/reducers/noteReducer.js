@@ -14,6 +14,10 @@ const noteReducer = (state = [], action) => {
     )
   }
 
+  if (action.type === 'INIT_NOTES') {
+    return action.data
+  }
+
   return state
 }
 
@@ -35,6 +39,13 @@ export const toggleImportanceOf = (id) => {
   return {
     type: 'TOGGLE_IMPORTANCE',
     data: { id }
+  }
+}
+
+export const initializeNotes = (notes) => {
+  return {
+    type: 'INIT_NOTES',
+    data: notes,
   }
 }
 
