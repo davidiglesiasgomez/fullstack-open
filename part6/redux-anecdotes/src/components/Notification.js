@@ -12,11 +12,11 @@ const Notification = () => {
 
   return (
     <>
-    { notification &&
+      { notification &&
       <div style={style}>
         {notification}
       </div>
-    }
+      }
     </>
   )
 }
