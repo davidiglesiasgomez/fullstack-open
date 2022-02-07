@@ -97,10 +97,9 @@ const Anecdote = ({ anecdotes }) => {
   const anecdote = anecdotes.find(anecdote => Number(anecdote.id) === Number(id))
   return (
     <div>
-      <h2>{anecdote.content}</h2>
-      <div>Author: {anecdote.author}</div>
-      <div>URL: {anecdote.info}</div>
-      <div>Votes: {anecdote.votes}</div>
+      <h2>{anecdote.content} by {anecdote.author}</h2>
+      <div>has {anecdote.votes} votes</div>
+      <div>for more info see {anecdote.info}</div>
     </div>
   )
 }
