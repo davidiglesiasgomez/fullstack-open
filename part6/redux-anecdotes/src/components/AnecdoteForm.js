@@ -1,17 +1,17 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
 import { createAnecdote } from '../reducers/anecdoteReducer'
 import { notify } from '../reducers/notificationReducer'
+import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
 
-const AnecdoteForm = () => {
-  const dispatch = useDispatch()
+const AnecdoteForm = (props) => {
 
   const addAnecdote = async (event) => {
     event.preventDefault()
     const content = event.target.anecdote.value
     event.target.anecdote.value = ''
-    dispatch(createAnecdote(content))
-    dispatch(notify(`You added '${content}'`, 5))
+    props.createAnecdote(content)
+    props.notify(`You added '${content}'`, 5)
   }
 
   return (
@@ -25,4 +25,17 @@ const AnecdoteForm = () => {
   )
 }
 
-export default AnecdoteForm
+AnecdoteForm.propTypes = {
+  createAnecdote: PropTypes.func,
+  notify: PropTypes.func,
+}
+
+const mapDispatchToProps = {
+  createAnecdote,
+  notify
+}
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(AnecdoteForm)
