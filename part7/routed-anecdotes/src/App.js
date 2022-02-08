@@ -3,7 +3,7 @@ import {
   BrowserRouter as Router,
   Switch, Route, Link,
   useParams,
-  Redirect
+  useHistory
 } from "react-router-dom"
 import { useField } from './hooks'
 
@@ -56,6 +56,7 @@ const Footer = () => (
 )
 
 const CreateNew = (props) => {
+  const history = useHistory()
   const content = useField('text')
   const author = useField('text')
   const info = useField('text')
@@ -68,6 +69,7 @@ const CreateNew = (props) => {
       info: info.value,
       votes: 0
     })
+    history.push('/')
   }
 
   const handleReset = (e) => {
@@ -126,6 +128,7 @@ const Notification = ({ notification }) => {
 }
 
 const App = () => {
+  const [notification, setNotification] = useState('')
   const [anecdotes, setAnecdotes] = useState([
     {
       content: 'If it hurts, do it more often',
@@ -142,8 +145,6 @@ const App = () => {
       id: '2'
     }
   ])
-
-  const [notification, setNotification] = useState('')
 
   const addNew = (anecdote) => {
     anecdote.id = (Math.random() * 10000).toFixed(0)
@@ -180,7 +181,7 @@ const App = () => {
           <About />
         </Route>
         <Route path="/create">
-          { !notification.includes('a new anecdote') ? <CreateNew addNew={addNew} /> : <Redirect to="/" /> }
+          <CreateNew addNew={addNew} />
         </Route>
         <Route path="/">
           <AnecdoteList anecdotes={anecdotes} />
@@ -192,4 +193,4 @@ const App = () => {
   )
 }
 
-export default App;
+export default App
