@@ -6,11 +6,14 @@ import loginService from './services/login'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
+import { useDispatch } from 'react-redux'
+import { notify } from './reducers/notificationReducer'
 
 const App = () => {
+  const dispatch = useDispatch()
+
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
-  const [errorMessage, setErrorMessage] = useState({})
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
@@ -39,10 +42,7 @@ const App = () => {
   }, [])
 
   const handleMessage = (message, type) => {
-    setErrorMessage({ message: message, type: type })
-    setTimeout(() => {
-      setErrorMessage({})
-    }, 5000)
+    dispatch(notify(message, type, 5))
   }
 
   const handleLogin = async (event) => {
@@ -145,7 +145,7 @@ const App = () => {
 
       <h1>Blogs</h1>
 
-      <Notification message={errorMessage} />
+      <Notification />
 
       {user === null &&
         <Togglable buttonLabel="login">
