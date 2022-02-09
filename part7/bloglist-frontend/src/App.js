@@ -96,7 +96,7 @@ const App = () => {
   }
 
   const handleLikeBlog = async (blogObj) => {
-
+    console.log({blogObj})
     try {
 
       dispatch(likeBlog(blogObj))
