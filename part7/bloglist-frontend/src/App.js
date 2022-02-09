@@ -8,7 +8,7 @@ import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
 import { useSelector, useDispatch } from 'react-redux'
 import { notify } from './reducers/notificationReducer'
-import { initializeBlogs, createBlog } from './reducers/blogReducer'
+import { initializeBlogs, createBlog, deleteBlog, likeBlog } from './reducers/blogReducer'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -85,7 +85,6 @@ const App = () => {
 
       dispatch(createBlog(newBlogObj))
       handleMessage(`a new blog '${newBlogObj.title}' by '${newBlogObj.author}' added`, 'success')
-      blogs.concat(newBlogObj)
       blogFormRef.current.toggleVisibility()
 
     } catch (exception) {
@@ -97,17 +96,11 @@ const App = () => {
   }
 
   const handleLikeBlog = async (blogObj) => {
-    console.log({blogObj})
-    try {
-      const likedBlog = await blogService.addLike(blogObj)
-      console.log({likedBlog})
 
+    try {
+
+      dispatch(likeBlog(blogObj))
       handleMessage(`the blog '${blogObj.title}' by '${blogObj.author}' was liked`, 'success')
-      // setBlogs( blogs.map(blog =>
-      //   blog.id === blogObj.id
-      //     ? likedBlog
-      //     : blog
-      // ).sort(orderByLikes) )
 
     } catch (exception) {
 
@@ -124,10 +117,9 @@ const App = () => {
     }
 
     try {
-      await blogService.remove(blogObj)
 
+      dispatch(deleteBlog(blogObj))
       handleMessage(`the blog '${blogObj.title}' by '${blogObj.author}' was deleted`, 'success')
-      // setBlogs( blogs.filter(blog => { return blog.id !== blogObj.id } ) )
 
     } catch (exception) {
 
