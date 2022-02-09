@@ -6,30 +6,26 @@ import loginService from './services/login'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
-import { useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { notify } from './reducers/notificationReducer'
+import { initializeBlogs, createBlog } from './reducers/blogReducer'
 
 const App = () => {
   const dispatch = useDispatch()
 
-  const [blogs, setBlogs] = useState([])
+  useEffect(() => {
+    dispatch(initializeBlogs())
+  }, [dispatch])
+
+  const blogs = useSelector(state => state.blogs
+    .sort((blogA, blogB) => blogA.likes<blogB.likes)
+  )
+
   const [user, setUser] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
   const blogFormRef = useRef()
-
-  const orderByLikes = (blogA, blogB) => {
-    if (blogA.likes > blogB.likes) return -1
-    if (blogA.likes < blogB.likes) return 1
-    return 0
-  }
-
-  useEffect(() => {
-    blogService.getAll().then(blogs => {
-      setBlogs( blogs.sort(orderByLikes) )
-    })
-  }, [])
 
   useEffect(() => {
     const loggedBlogListAppUser = window.localStorage.getItem('loggedBlogListAppUser')
@@ -86,10 +82,10 @@ const App = () => {
   const handleAddBlog = async (newBlogObj) => {
 
     try {
-      const blog = await blogService.create(newBlogObj)
 
-      handleMessage(`a new blog '${blog.title}' by '${blog.author}' added`, 'success')
-      setBlogs( blogs.concat(blog) )
+      dispatch(createBlog(newBlogObj))
+      handleMessage(`a new blog '${newBlogObj.title}' by '${newBlogObj.author}' added`, 'success')
+      blogs.concat(newBlogObj)
       blogFormRef.current.toggleVisibility()
 
     } catch (exception) {
@@ -101,16 +97,17 @@ const App = () => {
   }
 
   const handleLikeBlog = async (blogObj) => {
-
+    console.log({blogObj})
     try {
       const likedBlog = await blogService.addLike(blogObj)
+      console.log({likedBlog})
 
       handleMessage(`the blog '${blogObj.title}' by '${blogObj.author}' was liked`, 'success')
-      setBlogs( blogs.map(blog =>
-        blog.id === blogObj.id
-          ? likedBlog
-          : blog
-      ).sort(orderByLikes) )
+      // setBlogs( blogs.map(blog =>
+      //   blog.id === blogObj.id
+      //     ? likedBlog
+      //     : blog
+      // ).sort(orderByLikes) )
 
     } catch (exception) {
 
@@ -130,7 +127,7 @@ const App = () => {
       await blogService.remove(blogObj)
 
       handleMessage(`the blog '${blogObj.title}' by '${blogObj.author}' was deleted`, 'success')
-      setBlogs( blogs.filter(blog => { return blog.id !== blogObj.id } ) )
+      // setBlogs( blogs.filter(blog => { return blog.id !== blogObj.id } ) )
 
     } catch (exception) {
 
