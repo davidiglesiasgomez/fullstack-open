@@ -37,10 +37,6 @@ const App = () => {
     blogService.setToken(loggedUser.token)
   }, [])
 
-  const handleMessage = (message, type) => {
-    dispatch(notify(message, type, 5))
-  }
-
   const handleLogin = async (event) => {
     event.preventDefault()
     // console.log('logging in with', username, password)
@@ -62,7 +58,7 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      handleMessage('Wrong credentials', 'error')
+      dispatch(notify('Wrong credentials', 'error', 5))
     }
   }
 
@@ -84,12 +80,12 @@ const App = () => {
     try {
 
       dispatch(createBlog(newBlogObj))
-      handleMessage(`a new blog '${newBlogObj.title}' by '${newBlogObj.author}' added`, 'success')
+      dispatch(notify(`a new blog '${newBlogObj.title}' by '${newBlogObj.author}' added`, 'success', 5))
       blogFormRef.current.toggleVisibility()
 
     } catch (exception) {
 
-      handleMessage(exception.response.data.error, 'error')
+      dispatch(notify(exception.response.data.error, 'error', 5))
 
     }
 
@@ -100,11 +96,11 @@ const App = () => {
     try {
 
       dispatch(likeBlog(blogObj))
-      handleMessage(`the blog '${blogObj.title}' by '${blogObj.author}' was liked`, 'success')
+      dispatch(notify(`the blog '${blogObj.title}' by '${blogObj.author}' was liked`, 'success', 5))
 
     } catch (exception) {
 
-      handleMessage(exception.response.data.error, 'error')
+      dispatch(notify(exception.response.data.error, 'error', 5))
 
     }
 
@@ -119,11 +115,11 @@ const App = () => {
     try {
 
       dispatch(deleteBlog(blogObj))
-      handleMessage(`the blog '${blogObj.title}' by '${blogObj.author}' was deleted`, 'success')
+      dispatch(notify(`the blog '${blogObj.title}' by '${blogObj.author}' was deleted`, 'success', 5))
 
     } catch (exception) {
 
-      handleMessage(exception.response.data.error, 'error')
+      dispatch(notify(exception.response.data.error, 'error', 5))
 
     }
 
