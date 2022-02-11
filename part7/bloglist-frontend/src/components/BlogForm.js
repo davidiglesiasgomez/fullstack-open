@@ -1,10 +1,16 @@
-import React, { useState } from 'react'
-import PropTypes from 'prop-types'
+import React, { useState, useRef } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import Togglable from '../components/Togglable'
+import { createBlog } from '../reducers/blogReducer'
 
-const BlogForm = ({ handleAddBlog }) => {
+const BlogForm = () => {
+  const dispatch = useDispatch()
+  const user = useSelector(state => state.user)
   const [newTitle, setTitle] = useState('')
   const [newAuthor, setAuthor] = useState('')
   const [newUrl, setUrl] = useState('')
+
+  const blogFormRef = useRef()
 
   const addBlog = (event) => {
     event.preventDefault()
@@ -15,7 +21,8 @@ const BlogForm = ({ handleAddBlog }) => {
       url: newUrl
     }
 
-    handleAddBlog(newBlogObj)
+    dispatch(createBlog(newBlogObj))
+    blogFormRef.current.toggleVisibility()
 
     setTitle('')
     setAuthor('')
@@ -23,33 +30,33 @@ const BlogForm = ({ handleAddBlog }) => {
 
   }
 
-  return <>
-    <h2>Blog form</h2>
-    <form onSubmit={addBlog}>
-      <br />title: <input
-        id="title"
-        value={newTitle}
-        onChange={({ target }) => setTitle(target.value)}
-      />
-      <br />author: <input
-        id="author"
-        value={newAuthor}
-        onChange={({ target }) => setAuthor(target.value)}
-      />
-      <br />url: <input
-        id="url"
-        value={newUrl}
-        onChange={({ target }) => setUrl(target.value)}
-      />
-      <br /><button type="submit"
-        id="addBlogButton"
-      >save</button>
-    </form>
-  </>
-}
+  if (user === null) return <></>
 
-BlogForm.propTypes = {
-  handleAddBlog: PropTypes.func.isRequired
+  return (
+    <Togglable buttonLabel="create new blog" ref={blogFormRef}>
+      <h2>Blog form</h2>
+      <form onSubmit={addBlog}>
+        <br />title: <input
+          id="title"
+          value={newTitle}
+          onChange={({ target }) => setTitle(target.value)}
+        />
+        <br />author: <input
+          id="author"
+          value={newAuthor}
+          onChange={({ target }) => setAuthor(target.value)}
+        />
+        <br />url: <input
+          id="url"
+          value={newUrl}
+          onChange={({ target }) => setUrl(target.value)}
+        />
+        <br /><button type="submit"
+          id="addBlogButton"
+        >save</button>
+      </form>
+    </Togglable>
+  )
 }
 
 export default BlogForm

@@ -50,13 +50,16 @@ export const userLogin = ( username, password ) => {
 }
 
 export const userLogout = () => {
-  window.localStorage.setItem(
-    'loggedBlogListAppUser',
-    JSON.stringify(null)
-  )
-  blogService.setToken(null)
-  return {
-    type: '@auth/logout'
+  return async dispatch => {
+    window.localStorage.setItem(
+      'loggedBlogListAppUser',
+      JSON.stringify(null)
+    )
+    blogService.setToken(null)
+    dispatch({
+      type: '@auth/logout'
+    })
+    dispatch(notify('Logout', 'success', 5))
   }
 }
 
