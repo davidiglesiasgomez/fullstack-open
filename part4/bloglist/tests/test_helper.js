@@ -45,7 +45,7 @@ const initialBlogs = [
     author: 'Robert C. Martin',
     url: 'http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html',
     likes: 0,
-    user: '61c08ab51c99611160a8f8ac',
+    user: '61c093b091da692f40cee05b',
     __v: 0
   },
   {
@@ -54,7 +54,7 @@ const initialBlogs = [
     author: 'Robert C. Martin',
     url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
     likes: 2,
-    user: '61c08ab51c99611160a8f8ac',
+    user: '61c093b091da692f40cee05b',
     __v: 0
   }
 ]
@@ -64,7 +64,7 @@ const initialUsers = [
     _id: '61c08ab51c99611160a8f8ac',
     username: 'root',
     name: 'Superuser',
-    blogs: [],
+    blogs: ['5a422a851b54a676234d17f7', '5a422aa71b54a676234d17f8', '5a422b3a1b54a676234d17f9', '5a422b891b54a676234d17fa'],
     passwordHash: '',
     __v: 0
   },
@@ -72,7 +72,7 @@ const initialUsers = [
     _id: '61c093b091da692f40cee05b',
     username: 'random',
     name: 'Randomuser',
-    blogs: ['5a422a851b54a676234d17f7', '5a422aa71b54a676234d17f8', '5a422b3a1b54a676234d17f9', '5a422b891b54a676234d17fa', '5a422ba71b54a676234d17fb', '5a422bc61b54a676234d17fc'],
+    blogs: ['5a422ba71b54a676234d17fb', '5a422bc61b54a676234d17fc'],
     passwordHash: '',
     __v: 0
   }

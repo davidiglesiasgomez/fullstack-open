@@ -212,7 +212,7 @@ describe('when there is initially some blogs saved', () => {
         .expect('Content-Type', /application\/json/)
 
       expect(response.body.user).toBeDefined()
-      expect(response.body.user).toEqual(helper.initialUsers[0]._id.toString())
+      expect(response.body.user.id).toEqual(helper.initialUsers[0]._id.toString())
     })
 
   })
