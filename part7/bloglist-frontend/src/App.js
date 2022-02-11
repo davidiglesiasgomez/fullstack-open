@@ -1,27 +1,29 @@
-import React, { useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import React from 'react'
 import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
 import LoginInfo from './components/LoginInfo'
 import BlogForm from './components/BlogForm'
 import BlogList from './components/BlogList'
-import { initializeBlogs } from './reducers/blogReducer'
+import { BrowserRouter, Switch, Route } from 'react-router-dom'
+import UserList from './components/UserList'
 
 const App = () => {
-  const dispatch = useDispatch()
-  useEffect(() => {
-    dispatch(initializeBlogs())
-  }, [dispatch])
-
   return (
-    <div>
+    <BrowserRouter>
       <h1>Blogs</h1>
       <Notification />
       <LoginForm />
       <LoginInfo />
-      <BlogForm />
-      <BlogList />
-    </div>
+      <Switch>
+        <Route path="/users">
+          <UserList />
+        </Route>
+        <Route path="/">
+          <BlogForm />
+          <BlogList />
+        </Route>
+      </Switch>
+    </BrowserRouter>
   )
 }
 

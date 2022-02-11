@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { deleteBlog, likeBlog } from '../reducers/blogReducer'
+import { initializeBlogs, deleteBlog, likeBlog } from '../reducers/blogReducer'
 import Blog from '../components/Blog'
 
 const LoginInfo = () => {
@@ -9,6 +9,10 @@ const LoginInfo = () => {
   const blogs = useSelector(state => state.blogs
     .sort((blogA, blogB) => blogA.likes<blogB.likes)
   )
+
+  useEffect(() => {
+    dispatch(initializeBlogs())
+  }, [dispatch])
 
   const handleLikeBlog = ( blogObj ) => {
     dispatch(likeBlog(blogObj))
