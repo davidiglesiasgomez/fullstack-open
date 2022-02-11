@@ -1,4 +1,5 @@
 import blogService from '../services/blogs'
+import { notify } from '../reducers/notificationReducer'
 
 const blogReducer = (state = [], action) => {
   // console.log('state now: ', state)
@@ -38,31 +39,46 @@ export const initializeBlogs = () => {
 
 export const createBlog = content => {
   return async dispatch => {
-    const newblog = await blogService.create(content)
-    dispatch({
-      type: '@blog/new',
-      data: newblog,
-    })
+    try {
+      const newBlog = await blogService.create(content)
+      dispatch({
+        type: '@blog/new',
+        data: newBlog,
+      })
+      dispatch(notify(`A new blog '${newBlog.title}' by '${newBlog.author}' added`, 'success', 5))
+    } catch (exception) {
+      dispatch(notify(exception.response.data.error, 'error', 5))
+    }
   }
 }
 
 export const deleteBlog = blogObj => {
   return async dispatch => {
-    await blogService.remove(blogObj)
-    dispatch({
-      type: '@blog/delete',
-      data: { id: blogObj.id },
-    })
+    try {
+      await blogService.remove(blogObj)
+      dispatch({
+        type: '@blog/delete',
+        data: { id: blogObj.id },
+      })
+      dispatch(notify(`the blog '${blogObj.title}' by '${blogObj.author}' was deleted`, 'success', 5))
+    } catch (exception) {
+      dispatch(notify(exception.response.data.error, 'error', 5))
+    }
   }
 }
 
 export const likeBlog = blogObj => {
   return async dispatch => {
-    const blogLiked = await blogService.addLike(blogObj)
-    dispatch({
-      type: '@blog/like',
-      data: blogLiked,
-    })
+    try {
+      const blogLiked = await blogService.addLike(blogObj)
+      dispatch({
+        type: '@blog/like',
+        data: blogLiked,
+      })
+      dispatch(notify(`The blog '${blogLiked.title}' by '${blogLiked.author}' was liked`, 'success', 5))
+    } catch (exception) {
+      dispatch(notify(exception.response.data.error, 'error', 5))
+    }
   }
 }
 

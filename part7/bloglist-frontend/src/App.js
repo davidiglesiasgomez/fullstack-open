@@ -5,7 +5,6 @@ import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
 import { useSelector, useDispatch } from 'react-redux'
-import { notify } from './reducers/notificationReducer'
 import { initializeBlogs, createBlog, deleteBlog, likeBlog } from './reducers/blogReducer'
 import { userLogin, userLogout } from './reducers/authReducer'
 
@@ -39,54 +38,20 @@ const App = () => {
     dispatch(userLogout())
   }
 
-  const handleAddBlog = async (newBlogObj) => {
-
-    try {
-
-      dispatch(createBlog(newBlogObj))
-      dispatch(notify(`a new blog '${newBlogObj.title}' by '${newBlogObj.author}' added`, 'success', 5))
-      blogFormRef.current.toggleVisibility()
-
-    } catch (exception) {
-
-      dispatch(notify(exception.response.data.error, 'error', 5))
-
-    }
-
+  const handleAddBlog = ( blogObj ) => {
+    dispatch(createBlog(blogObj))
+    // blogFormRef.current.toggleVisibility()
   }
 
-  const handleLikeBlog = async (blogObj) => {
-    console.log({blogObj})
-    try {
-
-      dispatch(likeBlog(blogObj))
-      dispatch(notify(`the blog '${blogObj.title}' by '${blogObj.author}' was liked`, 'success', 5))
-
-    } catch (exception) {
-
-      dispatch(notify(exception.response.data.error, 'error', 5))
-
-    }
-
+  const handleLikeBlog = ( blogObj ) => {
+    dispatch(likeBlog(blogObj))
   }
 
-  const handleRemoveBlog = async (blogObj) => {
-
+  const handleRemoveBlog = ( blogObj ) => {
     if (!window.confirm(`Remove blog ${blogObj.title} by ${blogObj.author}`)) {
       return
     }
-
-    try {
-
-      dispatch(deleteBlog(blogObj))
-      dispatch(notify(`the blog '${blogObj.title}' by '${blogObj.author}' was deleted`, 'success', 5))
-
-    } catch (exception) {
-
-      dispatch(notify(exception.response.data.error, 'error', 5))
-
-    }
-
+    dispatch(deleteBlog(blogObj))
   }
 
   return (
