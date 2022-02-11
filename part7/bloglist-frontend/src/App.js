@@ -1,14 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
-import blogService from './services/blogs'
 import Notification from './components/Notification'
-import loginService from './services/login'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
 import { useSelector, useDispatch } from 'react-redux'
 import { notify } from './reducers/notificationReducer'
 import { initializeBlogs, createBlog, deleteBlog, likeBlog } from './reducers/blogReducer'
+import { userLogin, userLogout } from './reducers/authReducer'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -21,58 +20,23 @@ const App = () => {
     .sort((blogA, blogB) => blogA.likes<blogB.likes)
   )
 
-  const [user, setUser] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
   const blogFormRef = useRef()
 
-  useEffect(() => {
-    const loggedBlogListAppUser = window.localStorage.getItem('loggedBlogListAppUser')
-    if (!loggedBlogListAppUser || loggedBlogListAppUser === 'null') {
-      return
-    }
-    const loggedUser = JSON.parse(loggedBlogListAppUser)
-    setUser(loggedUser)
-    blogService.setToken(loggedUser.token)
-  }, [])
+  const user = useSelector(state => state.user)
 
-  const handleLogin = async (event) => {
+  const handleLogin = (event) => {
     event.preventDefault()
-    // console.log('logging in with', username, password)
-
-    try {
-      const user = await loginService.login({
-        username,
-        password,
-      })
-
-      window.localStorage.setItem(
-        'loggedBlogListAppUser',
-        JSON.stringify(user)
-      )
-
-      blogService.setToken(user.token)
-
-      setUser(user)
-      setUsername('')
-      setPassword('')
-    } catch (exception) {
-      dispatch(notify('Wrong credentials', 'error', 5))
-    }
+    dispatch(userLogin(username, password))
+    setUsername('')
+    setPassword('')
   }
 
   const handleLogout = (event) => {
     event.preventDefault()
-
-    window.localStorage.setItem(
-      'loggedBlogListAppUser',
-      JSON.stringify(null)
-    )
-
-    blogService.setToken(null)
-
-    setUser(null)
+    dispatch(userLogout())
   }
 
   const handleAddBlog = async (newBlogObj) => {
