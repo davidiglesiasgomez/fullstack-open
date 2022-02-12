@@ -6,6 +6,7 @@ import BlogForm from './components/BlogForm'
 import BlogList from './components/BlogList'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import UserList from './components/UserList'
+import User from './components/User'
 
 const App = () => {
   return (
@@ -15,6 +16,9 @@ const App = () => {
       <LoginForm />
       <LoginInfo />
       <Switch>
+        <Route path="/users/:id">
+          <User />
+        </Route>
         <Route path="/users">
           <UserList />
         </Route>
