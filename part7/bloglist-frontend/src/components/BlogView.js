@@ -41,6 +41,14 @@ const BlogView = () => {
           <button className='deleteBlogButton' onClick={() => handleRemoveBlog(blog)}>remove</button>
         </>
       }
+      { blog.comments.length>0 &&
+        <>
+          <h3>comments</h3>
+          <ul>
+            {blog.comments.map(comment => <li key={comment.id}>{comment.comment}</li>)}
+          </ul>
+        </>
+      }
     </>
   )
 }
