@@ -21,7 +21,7 @@
     "eject": "react-scripts eject",
     "eslint": "eslint .",
     "cypress:open": "cypress open",
-    "backend:test": "cd ../../part4/bloglist && npm run start:test"
+    "backend:test": "cd ../../part7/bloglist-backend && npm run start:test"
   },
   "eslintConfig": {
     "extends": [
