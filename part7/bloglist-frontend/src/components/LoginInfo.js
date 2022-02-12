@@ -14,7 +14,7 @@ const LoginInfo = () => {
   if (user === null) return <></>
 
   return (
-    <p>{user.name} logged in <button onClick={handleLogout}>logout</button></p>
+    <span>{user.name} logged in <button onClick={handleLogout}>logout</button></span>
   )
 }
 
