@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { initializeBlogs, deleteBlog, likeBlog } from '../reducers/blogReducer'
+import CommentForm from '../components/CommentForm'
 
 const BlogView = () => {
   const dispatch = useDispatch()
@@ -41,6 +42,7 @@ const BlogView = () => {
           <button className='deleteBlogButton' onClick={() => handleRemoveBlog(blog)}>remove</button>
         </>
       }
+      <CommentForm blog={blog} />
       { blog.comments.length>0 &&
         <>
           <h3>comments</h3>

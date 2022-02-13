@@ -6,7 +6,6 @@ import { initializeUsers } from '../reducers/usersReducer'
 const UserList = () => {
   const dispatch = useDispatch()
   const users = useSelector(state => state.users)
-  console.log({users})
 
   useEffect(() => {
     dispatch(initializeUsers())

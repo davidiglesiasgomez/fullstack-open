@@ -24,6 +24,20 @@ const blogReducer = (state = [], action) => {
     )
   }
 
+  if (action.type === '@blog/comment') {
+    const blogToChange = state.find(blog => blog.id === action.data.blog)
+    const changedBlog = {
+      ...blogToChange,
+      comments: blogToChange.comments.concat({
+        comment: action.data.comment,
+        id: action.data.id,
+      })
+    }
+    return state.map(blog =>
+      blog.id === action.data.blog ? changedBlog : blog
+    )
+  }
+
   return state
 }
 
@@ -76,6 +90,21 @@ export const likeBlog = blogObj => {
         data: blogLiked,
       })
       dispatch(notify(`The blog '${blogLiked.title}' by '${blogLiked.author}' was liked`, 'success', 5))
+    } catch (exception) {
+      dispatch(notify(exception.response.data.error, 'error', 5))
+    }
+  }
+}
+
+export const addComment = commentObj => {
+  return async dispatch => {
+    try {
+      const commentAdded = await blogService.addComment(commentObj)
+      dispatch({
+        type: '@blog/comment',
+        data: commentAdded,
+      })
+      dispatch(notify(`The comment '${commentObj.comment}' was added`, 'success', 5))
     } catch (exception) {
       dispatch(notify(exception.response.data.error, 'error', 5))
     }
