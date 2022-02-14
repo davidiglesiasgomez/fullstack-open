@@ -1,17 +1,11 @@
-import React, { useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import React from 'react'
+import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { initializeBlogs } from '../reducers/blogReducer'
 
 const LoginInfo = () => {
-  const dispatch = useDispatch()
   const blogs = useSelector(state => state.blogs
     .sort((blogA, blogB) => blogA.likes<blogB.likes)
   )
-
-  useEffect(() => {
-    dispatch(initializeBlogs())
-  }, [dispatch])
 
   const blogStyle = {
     paddingTop: 10,

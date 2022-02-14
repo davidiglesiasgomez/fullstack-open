@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import { initializeBlogs, deleteBlog, likeBlog } from '../reducers/blogReducer'
+import { deleteBlog, likeBlog } from '../reducers/blogReducer'
 import CommentForm from '../components/CommentForm'
 
 const BlogView = () => {
@@ -10,10 +10,6 @@ const BlogView = () => {
   const blogs = useSelector(state => state.blogs)
   const id = useParams().id
   const blog = blogs.find(blog => blog.id === id)
-
-  useEffect(() => {
-    dispatch(initializeBlogs())
-  }, [dispatch])
 
   const handleLikeBlog = ( blogObj ) => {
     dispatch(likeBlog(blogObj))

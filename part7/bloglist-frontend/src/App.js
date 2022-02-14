@@ -1,5 +1,5 @@
-import React from 'react'
-import { useSelector } from 'react-redux'
+import React, { useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import { BrowserRouter, Switch, Route, Link, Redirect } from 'react-router-dom'
 import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
@@ -9,13 +9,24 @@ import BlogList from './components/BlogList'
 import UserList from './components/UserList'
 import User from './components/User'
 import BlogView from './components/BlogView'
+import { initializeBlogs } from './reducers/blogReducer'
+import { initializeUsers } from './reducers/usersReducer'
 
 const App = () => {
+  const dispatch = useDispatch()
   const loggedUser = useSelector(state => state.user)
 
   const padding = {
     padding: 5
   }
+
+  useEffect(() => {
+    dispatch(initializeBlogs())
+  }, [dispatch])
+
+  useEffect(() => {
+    dispatch(initializeUsers())
+  }, [dispatch])
 
   return (
     <BrowserRouter>
