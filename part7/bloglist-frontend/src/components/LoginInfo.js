@@ -1,20 +1,27 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { Link } from 'react-router-dom'
 import { userLogout } from '../reducers/authReducer'
 
 const LoginInfo = () => {
   const dispatch = useDispatch()
-  const user = useSelector(state => state.user)
+  const loggedUser = useSelector(state => state.user)
 
   const handleLogout = (event) => {
     event.preventDefault()
     dispatch(userLogout())
   }
 
-  if (user === null) return <></>
+  const padding = {
+    padding: 5
+  }
+
+  if (loggedUser === null) return (
+    <Link style={padding} to="/login">login</Link>
+  )
 
   return (
-    <span>{user.name} logged in <button onClick={handleLogout}>logout</button></span>
+    <span>{loggedUser.name} logged in <button onClick={handleLogout}>logout</button></span>
   )
 }
 
