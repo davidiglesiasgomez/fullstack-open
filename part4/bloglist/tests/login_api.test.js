@@ -3,27 +3,19 @@ const supertest = require('supertest')
 const app = require('../app')
 const api = supertest(app)
 const User = require('../models/user')
-const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const helper = require('./test_helper')
 
 describe('when there is initially one user in db', () => {
   beforeEach(async () => {
     await User.deleteMany({})
-
-    const passwordHash = await bcrypt.hash('sekret', 10)
-    const user = new User({
-      username: 'root',
-      name: 'Superuser',
-      passwordHash
-    })
-
-    await user.save()
+    await User.insertMany(helper.initialUsers)
   })
 
   test('correct username and password must return token and user info', async () => {
 
     const userLogin = {
-      username: 'root',
+      username: helper.initialUsers[0].username,
       password: 'sekret'
     }
 
@@ -41,7 +33,7 @@ describe('when there is initially one user in db', () => {
   test('correct username and password must return correct token', async () => {
 
     const userLogin = {
-      username: 'root',
+      username: helper.initialUsers[0].username,
       password: 'sekret'
     }
 

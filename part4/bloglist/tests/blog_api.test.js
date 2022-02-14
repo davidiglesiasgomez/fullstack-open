@@ -5,13 +5,11 @@ const api = supertest(app)
 const Blog = require('../models/blog')
 const helper = require('./test_helper')
 const User = require('../models/user')
-const bcrypt = require('bcrypt')
 
 describe('when there is initially some blogs saved', () => {
 
   beforeEach(async () => {
     await User.deleteMany({})
-    helper.initialUsers.map(async user => user.passwordHash = await bcrypt.hash('sekret', 10))
     await User.insertMany(helper.initialUsers)
     await Blog.deleteMany({})
     await Blog.insertMany(helper.initialBlogs)

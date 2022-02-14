@@ -65,7 +65,7 @@ const initialUsers = [
     username: 'root',
     name: 'Superuser',
     blogs: ['5a422a851b54a676234d17f7', '5a422aa71b54a676234d17f8', '5a422b3a1b54a676234d17f9', '5a422b891b54a676234d17fa'],
-    passwordHash: '',
+    passwordHash: '$2b$10$fV/6B82Lw3jaHAam.T5ZQObCa8JHU8mbry9.gEzc0VGzvCuWqRTUy',
     __v: 0
   },
   {
@@ -73,7 +73,7 @@ const initialUsers = [
     username: 'random',
     name: 'Randomuser',
     blogs: ['5a422ba71b54a676234d17fb', '5a422bc61b54a676234d17fc'],
-    passwordHash: '',
+    passwordHash: '$2b$10$CHCvQICTmkl0JjPbzlS8DurdKdvGP1/VRSIYr8CerCh9pWmvb0FIq',
     __v: 0
   }
 ]
