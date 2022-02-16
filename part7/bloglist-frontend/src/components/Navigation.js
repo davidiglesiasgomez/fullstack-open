@@ -32,7 +32,7 @@ const Navigation = () => {
             ? <>
               <Navbar.Text>{loggedUser.name} logged in</Navbar.Text>
               <Nav.Link href="#" as="span">
-                <Link className="text-light p-1" onClick={handleLogout}>logout</Link>
+                <a className="text-light p-1" onClick={handleLogout} href="#">logout</a>
               </Nav.Link>
             </>
             : <Nav.Link href="#" as="span"><Link to="/login">login</Link></Nav.Link>

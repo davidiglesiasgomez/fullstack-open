@@ -17,7 +17,6 @@ const Notification = () => {
       { notifications.map(notification =>
         <Toast key={notification.id} style={style} className={notification.className}>
           <Toast.Header>
-            <img src="holder.js/20x20?text=%20" className="rounded me-2" alt="" />
             <strong className="me-auto">Bootstrap</strong>
             <small className="text-muted">just now</small>
           </Toast.Header>

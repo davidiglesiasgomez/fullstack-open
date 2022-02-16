@@ -2,6 +2,8 @@ import React, { useState, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import Togglable from '../components/Togglable'
 import { createBlog } from '../reducers/blogReducer'
+import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/Button'
 
 const BlogForm = () => {
   const dispatch = useDispatch()
@@ -33,28 +35,44 @@ const BlogForm = () => {
   if (user === null) return <></>
 
   return (
-    <Togglable buttonLabel="create new blog" ref={blogFormRef}>
+    <Togglable buttonLabel="Create new blog" ref={blogFormRef}>
       <h2>Blog form</h2>
-      <form onSubmit={addBlog}>
-        <br />title: <input
-          id="title"
-          value={newTitle}
-          onChange={({ target }) => setTitle(target.value)}
-        />
-        <br />author: <input
-          id="author"
-          value={newAuthor}
-          onChange={({ target }) => setAuthor(target.value)}
-        />
-        <br />url: <input
-          id="url"
-          value={newUrl}
-          onChange={({ target }) => setUrl(target.value)}
-        />
-        <br /><button type="submit"
+      <Form onSubmit={addBlog}>
+        <Form.Group className="mb-3" controlId="title">
+          <Form.Label>Title</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Enter title"
+            value={newTitle}
+            onChange={({ target }) => setTitle(target.value)}
+          />
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="author">
+          <Form.Label>Author</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Enter author"
+            value={newAuthor}
+            onChange={({ target }) => setAuthor(target.value)}
+          />
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="url">
+          <Form.Label>Url</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Enter url"
+            value={newUrl}
+            onChange={({ target }) => setUrl(target.value)}
+          />
+        </Form.Group>
+        <Button
+          type="submit"
           id="addBlogButton"
-        >save</button>
-      </form>
+          variant="primary"
+        >
+          save
+        </Button>
+      </Form>
     </Togglable>
   )
 }

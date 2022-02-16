@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import Table from 'react-bootstrap/Table'
 
-const LoginInfo = () => {
+const BlogList = () => {
   const blogs = useSelector(state => state.blogs
     .sort((blogA, blogB) => blogA.likes<blogB.likes)
   )
@@ -25,4 +25,4 @@ const LoginInfo = () => {
   )
 }
 
-export default LoginInfo
+export default BlogList
