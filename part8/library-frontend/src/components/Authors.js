@@ -8,8 +8,6 @@ const Authors = (props) => {
     return null
   }
 
-  console.log({result})
-
   if (result.loading) {
     return <div>loading...</div>
   }
