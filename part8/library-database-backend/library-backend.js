@@ -1,4 +1,4 @@
-const { ApolloServer, ApolloError, UserInputError, gql } = require('apollo-server')
+const { ApolloServer, ApolloError, gql } = require('apollo-server')
 const { v1: uuid } = require('uuid')
 
 const mongoose = require('mongoose')
@@ -62,14 +62,26 @@ const resolvers = {
   Query: {
     bookCount: () => async () => Book.collection.countDocuments(),
     authorCount: () => async () => Author.collection.countDocuments(),
-    allBooks: async (root, args) => await Book.find({}),
-      // .filter(book => args.author === undefined ? true : book.author === args.author)
-      // .filter(book => args.genre === undefined ? true : book.genres.find(g => g === args.genre)),
+    allBooks: async (root, args) => {
+      let filters = {}
+      if (args.author !== undefined) {
+        let author = await Author.findOne({ name: args.author })
+        if (author === null) {
+          return []
+        }
+        filters.author = author.id
+      }
+      if (args.genre !== undefined) {
+        filters.genres = { $in: args.genre }
+      }
+      return await Book.find(filters).populate('author')
+    },
     allAuthors: async () => await Author.find({}),
   },
   Author: {
     bookCount: (root) => {
-      return books.filter(book => book.author === root.name).length
+      // return books.filter(book => book.author === root.name).length
+      return 0
     }
   },
   Mutation: {
@@ -80,7 +92,7 @@ const resolvers = {
         try {
           await author.save()
         } catch (error) {
-          throw new ApolloError('Error storing new author')
+          throw new ApolloError('Error storing new author ' + error.message)
         }
       }
 
@@ -93,22 +105,19 @@ const resolvers = {
       try {
         await newBook.save()
       } catch (error) {
-        throw new UserInputError(error.message, {
-          invalidArgs: args,
-        })
+        throw new ApolloError('Error storing new book ' + error.message)
       }
 
       let returnedBook = await Book.findById(newBook._id).populate('author')
       return returnedBook
     },
-    editAuthor: (root, args) => {
-      const author = authors.find(a => a.name === args.name)
-      if (!author) {
-        return null
+    editAuthor: async (root, args) => {
+      try {
+        let author = await Author.findOneAndUpdate({ name: args.name }, { born: args.setBornTo }, {new: true})
+      } catch (error) {
+        throw new ApolloError('Error updating author ' + error.message)
       }
-      authorEdited = { ...author, born: args.setBornTo }
-      authors = authors.map(a => ( a.name === args.name ? authorEdited : a ))
-      return authorEdited
+      return author
     }
   }
 }
