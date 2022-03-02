@@ -1,5 +1,5 @@
 require('dotenv').config()
-const { ApolloServer, ApolloError, gql } = require('apollo-server')
+const { ApolloServer, UserInputError, gql } = require('apollo-server')
 const { v1: uuid } = require('uuid')
 const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
@@ -112,7 +112,7 @@ const resolvers = {
         try {
           await author.save()
         } catch (error) {
-          throw new ApolloError('Error storing new author ' + error.message)
+          throw new UserInputError('Error storing new author ' + error.message)
         }
       }
 
@@ -125,7 +125,7 @@ const resolvers = {
       try {
         await newBook.save()
       } catch (error) {
-        throw new ApolloError('Error storing new book ' + error.message)
+        throw new UserInputError('Error storing new book ' + error.message)
       }
 
       let returnedBook = await Book.findById(newBook._id).populate('author')
@@ -135,7 +135,7 @@ const resolvers = {
       try {
         let author = await Author.findOneAndUpdate({ name: args.name }, { born: args.setBornTo }, {new: true})
       } catch (error) {
-        throw new ApolloError('Error updating author ' + error.message)
+        throw new UserInputError('Error updating author ' + error.message)
       }
       return author
     },
@@ -143,8 +143,22 @@ const resolvers = {
       const user = new User({ username: args.username, favoriteGenre: args.favoriteGenre })
         return user.save()
         .catch(error => {
-          throw new ApolloError('Error creating user ' + error.message)
+          throw new UserInputError('Error creating user ' + error.message)
         })
+    },
+    login: async (root, args) => {
+      const user = await User.findOne({ username: args.username })
+
+      if ( !user || args.password !== 'secret' ) {
+        throw new UserInputError("Wrong credentials")
+      }
+
+      const userForToken = {
+        username: user.username,
+        id: user._id,
+      }
+
+      return { value: jwt.sign(userForToken, JWT_SECRET) }
     },
   }
 }
