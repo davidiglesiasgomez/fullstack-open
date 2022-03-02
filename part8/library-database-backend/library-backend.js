@@ -1,12 +1,14 @@
 require('dotenv').config()
 const { ApolloServer, ApolloError, gql } = require('apollo-server')
 const { v1: uuid } = require('uuid')
-
+const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
 const Author = require('./models/author')
 const Book = require('./models/book')
+const User = require('./models/user')
 
 const MONGODB_URI = process.env.MONGODB_URI
+const JWT_SECRET  = process.env.JWT_SECRET
 
 console.log('connecting to', MONGODB_URI)
 
@@ -36,11 +38,22 @@ const typeDefs = gql`
     genres: [String!]!
   }
 
+  type Token {
+    value: String!
+  }
+
+  type User {
+    username: String!
+    favoriteGenre: String!
+    id: ID!
+  }
+
   type Query {
     bookCount: Int!
     authorCount: Int!
     allBooks(author: String, genre: String): [Book!]!
     allAuthors: [Author!]!
+    me: User
   }
 
   type Mutation {
@@ -54,6 +67,14 @@ const typeDefs = gql`
       name: String!
       setBornTo: Int!
     ): Author
+    createUser(
+      username: String!
+      favoriteGenre: String!
+    ): User
+    login(
+      username: String!
+      password: String!
+    ): Token
   }
 
 `
@@ -117,7 +138,14 @@ const resolvers = {
         throw new ApolloError('Error updating author ' + error.message)
       }
       return author
-    }
+    },
+    createUser: async (root, args) => {
+      const user = new User({ username: args.username, favoriteGenre: args.favoriteGenre })
+        return user.save()
+        .catch(error => {
+          throw new ApolloError('Error creating user ' + error.message)
+        })
+    },
   }
 }
 
