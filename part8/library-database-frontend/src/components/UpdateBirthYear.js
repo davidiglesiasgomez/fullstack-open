@@ -32,7 +32,7 @@ const UpdateBirthYear = ({ authors }) => {
           name
           <select value={name} onChange={({ target }) => setName(target.value)}>
             <option value="">-- select one --</option>
-            {authors.map(author => <option value={author.name}>{author.name}</option>)}
+            {authors.map(author => <option key={author.id} value={author.name}>{author.name}</option>)}
           </select>
         </label>
       </div>
