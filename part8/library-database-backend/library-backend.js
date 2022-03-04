@@ -144,13 +144,13 @@ const resolvers = {
       if (!currentUser) {
         throw new AuthenticationError('Not authenticated')
       }
-
       try {
-        let author = await Author.findOneAndUpdate({ name: args.name }, { born: args.setBornTo }, {new: true})
+        await Author.findOneAndUpdate({ name: args.name }, { born: args.setBornTo }, {new: true})
       } catch (error) {
         throw new UserInputError('Error updating author ' + error.message)
       }
-      return author
+      let returnedAuthor = await Author.findOne({ name: args.name })
+      return returnedAuthor
     },
     createUser: async (root, args) => {
       const user = new User({ username: args.username, favoriteGenre: args.favoriteGenre })
