@@ -66,3 +66,19 @@ export const LOGIN = gql`
     }
   }
 `
+
+export const RECOMMENDATIONS = gql`
+  query {
+    me {
+      favoriteGenre
+    }
+    allBooks {
+      title
+      published
+      author {
+        name
+      }
+      genres
+    }
+  }
+`
