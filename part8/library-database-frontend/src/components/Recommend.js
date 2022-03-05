@@ -1,23 +1,27 @@
 import { useQuery } from '@apollo/client'
-import { RECOMMENDATIONS } from '../queries'
+import { ME, ALL_BOOKS } from '../queries'
 import BookList from '../components/BookList'
 
 const Recommend = (props) => {
-  const result = useQuery(RECOMMENDATIONS)
+  const { loading, data } = useQuery(ME);
+  const { loading: loadingBooks, data: dataBooks } = useQuery(ALL_BOOKS, {
+    variables: { genre: (data && data.me && data.me.favoriteGenre ? data.me.favoriteGenre : null ) },
+    skip: !(data && data.me && data.me.favoriteGenre )
+  });
 
   if (!props.show) {
     return null
   }
 
-  if (result.loading) {
+  if (loading || loadingBooks) {
     return <div>loading...</div>
   }
 
   return (
     <div>
       <h2>recommendations</h2>
-      <p>books in your favourite genre <strong>{result.data.me.favoriteGenre}</strong></p>
-      <BookList books={result.data.allBooks.filter(item => item.genres.includes(result.data.me.favoriteGenre))} />
+      <p>books in your favourite genre <strong>{data.me.favoriteGenre}</strong></p>
+      <BookList books={dataBooks.allBooks} />
     </div>
   )
 }

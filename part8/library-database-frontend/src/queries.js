@@ -67,19 +67,10 @@ export const LOGIN = gql`
   }
 `
 
-export const RECOMMENDATIONS = gql`
+export const ME = gql`
   query {
     me {
       favoriteGenre
-    }
-    allBooks {
-      title
-      published
-      author {
-        name
-      }
-      genres
-      id
     }
   }
 `
