@@ -13,8 +13,6 @@ const Recommend = (props) => {
     return <div>loading...</div>
   }
 
-  console.log(result.data)
-
   return (
     <div>
       <h2>recommendations</h2>

@@ -4,8 +4,10 @@ import { ALL_BOOKS } from '../queries'
 import BookList from '../components/BookList'
 
 const Books = (props) => {
-  const result = useQuery(ALL_BOOKS)
   const [genre, setGenre] = useState('')
+  const result = useQuery(ALL_BOOKS, {
+    variables: ( genre !== '' ? { genre } : {} ),
+  })
 
   if (!props.show) {
     return null
@@ -21,7 +23,7 @@ const Books = (props) => {
   return (
     <div>
       <h2>books</h2>
-      <BookList books={books.filter(item => ( genre === '' ? true : item.genres.includes(genre) ))} />
+      <BookList books={books} />
       {genres.map((item, i) => (
         <button key={i} onClick={() => setGenre(item)}>{item}</button>
       ))}
