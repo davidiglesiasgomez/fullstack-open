@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useQuery } from '@apollo/client'
 import { ALL_BOOKS } from '../queries'
 import BookList from '../components/BookList'
@@ -9,6 +9,11 @@ const Books = (props) => {
     variables: ( genre !== '' ? { genre } : {} ),
     skip: !props.show
   })
+
+  useEffect(() => {
+    result.refetch(( genre !== '' ? { genre } : {} ));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [genre]);
 
   if (!props.show) {
     return null
