@@ -3,7 +3,9 @@ import { ME, ALL_BOOKS } from '../queries'
 import BookList from '../components/BookList'
 
 const Recommend = (props) => {
-  const { loading, data } = useQuery(ME);
+  const { loading, data } = useQuery(ME, {
+    skip: !props.show
+  });
   const { loading: loadingBooks, data: dataBooks } = useQuery(ALL_BOOKS, {
     variables: { genre: (data && data.me && data.me.favoriteGenre ? data.me.favoriteGenre : null ) },
     skip: !(data && data.me && data.me.favoriteGenre )

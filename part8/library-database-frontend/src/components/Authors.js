@@ -3,7 +3,9 @@ import { ALL_AUTHORS } from '../queries'
 import UpdateBirthYear from './UpdateBirthYear'
 
 const Authors = (props) => {
-  const result = useQuery(ALL_AUTHORS)
+  const result = useQuery(ALL_AUTHORS, {
+    skip: !props.show
+  })
 
   if (!props.show) {
     return null
