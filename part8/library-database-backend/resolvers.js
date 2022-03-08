@@ -27,7 +27,7 @@ const resolvers = {
       }
       return await Book.find(filters).populate('author')
     },
-    allAuthors: async () => await Author.find({}),
+    allAuthors: async () => await Author.find({}).populate('books'),
     me: (root, args, context) => {
       return context.currentUser
     },
@@ -39,7 +39,7 @@ const resolvers = {
   },
   Author: {
     bookCount: async (root) => {
-      return await Book.where({ author: root.id }).count()
+      return root.books.length
     }
   },
   Mutation: {
@@ -69,6 +69,13 @@ const resolvers = {
         await newBook.save()
       } catch (error) {
         throw new UserInputError('Error storing new book ' + error.message)
+      }
+
+      try {
+        author.books = author.books.concat(newBook._id)
+        await author.save()
+      } catch (error) {
+        throw new UserInputError('Error updating author ' + error.message)
       }
 
       let returnedBook = await Book.findById(newBook._id).populate('author')
