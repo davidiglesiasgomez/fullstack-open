@@ -39,6 +39,7 @@ const App = () => {
     setToken(null)
     localStorage.clear()
     client.resetStore()
+    setPage('authors')
   }
 
   return (
@@ -51,6 +52,8 @@ const App = () => {
         {token && <button onClick={() => setPage('recommend')}>recommend</button>}
         {token && <button onClick={logout}>logout</button>}
       </div>
+
+      <h1>library</h1>
 
       <Notification errorMessage={errorMessage} />
 

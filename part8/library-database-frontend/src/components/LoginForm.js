@@ -28,7 +28,6 @@ const LoginForm = ({ show, setToken, setPage }) => {
 
   const submit = async (event) => {
     event.preventDefault()
-
     login({ variables: { username, password } })
   }
 
@@ -38,6 +37,7 @@ const LoginForm = ({ show, setToken, setPage }) => {
 
   return (
     <div>
+      <h2>login</h2>
       <form onSubmit={submit}>
         <div>
           username <input
