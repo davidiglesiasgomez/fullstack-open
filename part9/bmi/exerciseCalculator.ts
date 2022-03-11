@@ -1,3 +1,21 @@
+interface CalculateExercisesValues {
+  value1: number[]
+  value2: number
+}
+
+const parseArgumentsCalculateExercises = (args: Array<string>): CalculateExercisesValues => {
+  if (args.length < 4) throw new Error('Not enough arguments')
+
+  if (args.find((item, index) => ( index<2 || !isNaN(Number(item)) ? false : true ))) {
+    throw new Error('Provided values were not numbers!')
+  }
+
+  return {
+    value1: args.slice(2, -1).map(item => Number(item)),
+    value2: Number(args[args.length - 1])
+  }
+}
+
 interface Result {
   periodLength: number
   trainingDays: number
@@ -8,7 +26,7 @@ interface Result {
   average: number
 }
 
-const calculateBcalculateExercises = (horasDiariasEjercicio: number[], cantidadObjetivo: number): Result => {
+const calculateExercises = (horasDiariasEjercicio: number[], cantidadObjetivo: number): Result => {
   const trainingDays = horasDiariasEjercicio.filter(item => item>0)
   const average = horasDiariasEjercicio.reduce((partial, item) => partial + item, 0) / horasDiariasEjercicio.length
   let rating = null
@@ -39,7 +57,8 @@ const calculateBcalculateExercises = (horasDiariasEjercicio: number[], cantidadO
 }
 
 try {
-  console.log(calculateBcalculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2))
+  const { value1, value2 } = parseArgumentsCalculateExercises(process.argv)
+  console.log(calculateExercises(value1, value2))
 } catch (error: unknown) {
   let errorMessage = 'Something went wrong.'
   if (error instanceof Error) {
